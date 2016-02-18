@@ -1,0 +1,6 @@
+[submodule "libusb"]
+	path = libusb
+	url = https://github.com/libusb/libusb.git
+[submodule "LightFX"]
+	path = LightFX
+	url = https://github.com/QuinnDamerell/LightFX.git
