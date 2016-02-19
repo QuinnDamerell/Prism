@@ -23,6 +23,8 @@
     <ClInclude Include="inc\PrismBase.h" />
     <ClInclude Include="inc\FadeCandyDevice.h" />
     <ClInclude Include="inc\UsbDeviceManager.h" />
+    <ClInclude Include="interface\IDeviceDiscoveryListener.h" />
+    <ClInclude Include="interface\IWriteablePixelEndpoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PrismBase.cpp" />
@@ -85,7 +87,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

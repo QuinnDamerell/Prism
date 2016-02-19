@@ -7,6 +7,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{a02d59b4-0a9b-4305-bbf2-22388656c39e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="interface">
+      <UniqueIdentifier>{75674d9b-3511-44db-8efa-7d02147bddaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Common.h">
@@ -20,6 +23,12 @@
     </ClInclude>
     <ClInclude Include="inc\FadeCandyDevice.h">
       <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\IDeviceDiscoveryListener.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\IWriteablePixelEndpoint.h">
+      <Filter>interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

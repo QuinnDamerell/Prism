@@ -1,27 +1,24 @@
 #pragma once
 
+#include <chrono>
 #include <mutex>
 #include <vector>
 #include <libusb.h>
 
-
-
 #include "Common.h"
 #include "FadeCandyDevice.h"
+#include "IDeviceDiscoveryListener.h"
 
 DECLARE_SMARTPOINTER(UsbDeviceManager);
 class UsbDeviceManager
 {
 public:
     UsbDeviceManager() {}
-    ~UsbDeviceManager() {}
+    ~UsbDeviceManager() { m_workerThread->join(); }
 
-    int Setup();
+    int Setup(IDeviceDiscoverListenerWeakPtr discoverListener);
 
 private:
-    // Fired by lib usb when a new device is found
-    static int LIBUSB_CALL cbNewHotplugDeivce(libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data);
-
     // Called when a usb is added
     void UsbDeviceArrived(libusb_device *device);
 
@@ -29,8 +26,8 @@ private:
     void UsbDeviceLeft(libusb_device *device);
     void UsbDeviceLeft(std::vector<FadeCandyDevicePtr>::iterator iter);
 
-    // Used to fake the hot plug logic
-    void FakeHotPlugThreadLoop();
+    // A function used for the worker thread.
+    void WorkerLoop();
 
     // The context for lib usb.
     libusb_context* m_libusbContext;
@@ -39,8 +36,14 @@ private:
     std::mutex m_deivceListLock;
 
     // A thread that gives us fake hot plug if not supported
-    std::unique_ptr<std::thread> m_fakeHotPlugThread;
+    std::unique_ptr<std::thread> m_workerThread;
 
     // Holds a list of current devices.
     std::vector<FadeCandyDevicePtr> m_deviceList;
+
+    // The last time we check for new devices.
+    std::chrono::high_resolution_clock::time_point m_lastDeviceCheckTime;
+
+    // Holds a refrernce to the device listener
+    IDeviceDiscoverListenerWeakPtr m_discoverListener;
 };

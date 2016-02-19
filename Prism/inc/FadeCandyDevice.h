@@ -1,12 +1,11 @@
 #pragma once
 
 #include <mutex>
-#include <set>
+#include <vector>
 #include <libusb.h>
 
 #include "Common.h"
-
-#define SERIAL_BUFFER_SIZE (256)
+#include "IWriteablePixelEndpoint.h"
 
 #ifdef OS_LINUX
 // No need to copy the buffer
@@ -32,12 +31,15 @@ enum PacketType
     FRAME,
 };
 
+// Used to transfer data to the USB device
 DECLARE_SMARTPOINTER(FadeCandyDevice);
 DECLARE_SMARTPOINTER(UsbTransfer);
 class UsbTransfer
 {
+    static const unsigned OUT_ENDPOINT = 1;
+
 public:
-    UsbTransfer(FadeCandyDevicePtr device, void *buffer, int length, PacketType type);
+    UsbTransfer(FadeCandyDevicePtr device, void *buffer, int length, PacketType type, bool synchronus);
     ~UsbTransfer();
 
     libusb_transfer* transfer;
@@ -46,11 +48,11 @@ public:
 #endif
     PacketType packetType;
     bool finished;
-
-    static const unsigned OUT_ENDPOINT = 1;
+    bool m_synchronus;
 };
 
 class FadeCandyDevice :
+    public IWriteablePixelEndpoint,
     public std::enable_shared_from_this<FadeCandyDevice>
 {
 public:
@@ -66,16 +68,14 @@ public:
     // Called when we should write the config
     void WriteConfiguration();
 
-    void WritePixels(byte* pixels, uint32_t length);
+    // Called when we want to write pixels.
+    void WritePixels(uint8_t* pixelArray, uint32_t length);
 
     // Called to get the libusb device
     libusb_device* GetDevice() { return m_Device; }
 
     // Called to get the libusb m_Handle
     libusb_device_handle* GetHandle() { return m_Handle; }
-
-    // Called when a transfer is done.
-    static void LIBUSB_CALL CompleteTransfer(libusb_transfer *transfer);
 
 private:
     static const unsigned PIXELS_PER_PACKET = 21;
@@ -98,7 +98,6 @@ private:
 
 
     // Device
-    char m_SerialBuffer[SERIAL_BUFFER_SIZE];
     libusb_device* m_Device;
     libusb_device_descriptor m_deviceDescriptor;
     libusb_device_handle* m_Handle;
@@ -114,9 +113,12 @@ private:
     }
 
     // Transfer queue things
-    std::set<UsbTransferPtr> m_pendingTransfers;
+    std::mutex m_pendingTransfersLock;
+    std::vector<UsbTransferPtr> m_pendingTransfers;
+    uint32_t m_NumFramesPending;
 
     // Private functions
     bool SubmitTransfer(UsbTransferPtr transPtr); 
+    void CleanupFinishedTransfers();
     void WriteFramebuffer();
 };

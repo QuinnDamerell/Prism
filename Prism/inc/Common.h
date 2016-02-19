@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <iostream>
 
 #define DECLARE_SMARTPOINTER(_TYPE_)			   \
 class _TYPE_;									   \
