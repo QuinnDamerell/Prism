@@ -171,7 +171,7 @@ void PrismBase::OnDeviceRemoved(IWriteablePixelEndpointPtr device)
 int renderCount = 0;
 std::random_device rd;
 std::uniform_int_distribution<int> dist(0, 7);
-std::uniform_int_distribution<int> largerDist(50, 300);
+std::uniform_int_distribution<int> largerDist(50, 60);
 std::uniform_real_distribution<double> doubleDist(0, 1);
 
 void PrismBase::OnPanelRendered() 
@@ -192,8 +192,8 @@ void PrismBase::OnPanelRendered()
         DrawablePixelPtr pixel = std::make_shared<DrawablePixel>(dist(rd), dist(rd));
 
         // Give it a constant color but random color
-        Pixel pix(.6, doubleDist(rd), doubleDist(rd), doubleDist(rd));
-        ConstantColorablePtr color = std::make_shared<ConstantColorable>(pix);
+        Pixel randomColor = GenerateRandomColor();
+        ConstantColorablePtr color = std::make_shared<ConstantColorable>(randomColor);
 
         // And make a nice fade effect
         SimpleFadePtr fade = std::make_shared<SimpleFade>(0, 1.0, milliseconds(800));
@@ -216,6 +216,7 @@ void PrismBase::OnTimelineFinished(std::shared_ptr<TimelineObject> timeline)
     std::weak_ptr<ITimelineObjectCallback> temp;
     timeline->SetFinishedCallback(temp);
     timeline->SetDuration(milliseconds(6000));
+    timeline->ShouldCleanupWhenFinshed(true);
     SimpleFadePtr simpleFade = std::dynamic_pointer_cast<SimpleFade>(timeline);
     if (simpleFade)
     {
