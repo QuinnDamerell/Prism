@@ -20,14 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Common.h" />
-    <ClInclude Include="inc\PrismBase.h" />
+    <ClInclude Include="inc\Gems\ColorPeaks.h" />
+    <ClInclude Include="inc\Prism.h" />
     <ClInclude Include="inc\FadeCandyDevice.h" />
     <ClInclude Include="inc\UsbDeviceManager.h" />
     <ClInclude Include="interface\IDeviceDiscoveryListener.h" />
+    <ClInclude Include="interface\IGem.h" />
     <ClInclude Include="interface\IWriteablePixelEndpoint.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\PrismBase.cpp" />
+    <ClCompile Include="src\Gems\ColorPeaks.cpp" />
+    <ClCompile Include="src\Prism.cpp" />
     <ClCompile Include="src\FadeCandyDevice.cpp" />
     <ClCompile Include="src\UsbDeviceManager.cpp" />
   </ItemGroup>
@@ -59,7 +62,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>

@@ -91,7 +91,7 @@ void FadeCandyDevice::WriteConfiguration()
     WritePixels(pix, 5);
 }
 
-void FadeCandyDevice::WritePixels(uint8_t* pixelArray, uint32_t length)
+void FadeCandyDevice::WritePixels(uint8_t* pixelArray, uint64_t length)
 {
     // Truncate to the framebuffer size, and only deal in whole pixels.
     int numPixels = length / 3;

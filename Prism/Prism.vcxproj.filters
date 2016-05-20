@@ -10,12 +10,15 @@
     <Filter Include="interface">
       <UniqueIdentifier>{75674d9b-3511-44db-8efa-7d02147bddaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Gems">
+      <UniqueIdentifier>{9c72d7b2-6129-49f1-92a5-262e080e0011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\Gems">
+      <UniqueIdentifier>{35149fd2-00a3-45f0-83f3-00f015f11c23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Common.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\PrismBase.h">
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\UsbDeviceManager.h">
@@ -30,16 +33,28 @@
     <ClInclude Include="interface\IWriteablePixelEndpoint.h">
       <Filter>interface</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Prism.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\IGem.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Gems\ColorPeaks.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\PrismBase.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\UsbDeviceManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\FadeCandyDevice.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Prism.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gems\ColorPeaks.cpp">
+      <Filter>src\Gems</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

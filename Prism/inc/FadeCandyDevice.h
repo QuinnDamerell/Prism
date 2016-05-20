@@ -69,7 +69,7 @@ public:
     void WriteConfiguration();
 
     // Called when we want to write pixels.
-    void WritePixels(uint8_t* pixelArray, uint32_t length);
+    void WritePixels(uint8_t* pixelArray, uint64_t length);
 
     // Called to get the libusb device
     libusb_device* GetDevice() { return m_Device; }

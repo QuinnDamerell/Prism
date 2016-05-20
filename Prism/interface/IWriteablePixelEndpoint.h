@@ -9,5 +9,5 @@ class IWriteablePixelEndpoint
 {
 public:
     // Write pixels to the device.
-    virtual void WritePixels(uint8_t* pixelArray, uint32_t length) = 0;
+    virtual void WritePixels(uint8_t* pixelArray, uint64_t length) = 0;
 };

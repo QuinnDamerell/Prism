@@ -18,7 +18,9 @@ int UsbDeviceManager::Setup(IDeviceDiscoverListenerWeakPtr discoverListener)
     m_discoverListener = discoverListener;
 
     // Start our worker thread.
-    m_workerThread.reset(new std::thread(std::bind(&UsbDeviceManager::WorkerLoop, this)));    
+    m_workerThread.reset(new std::thread(std::bind(&UsbDeviceManager::WorkerLoop, this)));
+
+    return 0;
 }
 
 void UsbDeviceManager::UsbDeviceArrived(libusb_device *newDevice)
