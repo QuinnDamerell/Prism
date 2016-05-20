@@ -1,6 +1,8 @@
 // PrismRunner.cpp : Defines the entry point for the console application.
 //
 
+#include <windows.h>
+
 #include <iostream>
 #include <string>
 #include "stdafx.h"
@@ -8,12 +10,12 @@
 
 int main()
 {
-     PrismBasePtr base = std::make_shared<PrismBase>();
+
+    PrismBasePtr base = std::make_shared<PrismBase>();
     base->Setup();
 
-    for (std::string line; std::getline(std::cin, line);) {
-        std::cout << line << std::endl;
-    }
+    HANDLE handle = CreateEvent(NULL, false, false, NULL);
+    WaitForSingleObject(handle, INFINITE);
     return 0;
 }
 

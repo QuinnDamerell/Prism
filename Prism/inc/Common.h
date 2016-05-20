@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <iostream>
+#include <cstdint>
 
 #define DECLARE_SMARTPOINTER(_TYPE_)			   \
 class _TYPE_;									   \

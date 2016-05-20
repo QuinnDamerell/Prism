@@ -45,6 +45,8 @@ void UsbDeviceManager::UsbDeviceArrived(libusb_device *newDevice)
     // Add to our list
     m_deviceList.push_back(device);
 
+    std::cout << "USB device found!\n";
+
     if (IDeviceDiscoverListenerPtr listener = m_discoverListener.lock())
     {
         listener->OnDeviceAdded(std::dynamic_pointer_cast<IWriteablePixelEndpoint>(device));
@@ -58,18 +60,22 @@ void UsbDeviceManager::UsbDeviceLeft(libusb_device *device)
         FadeCandyDevicePtr dev = *i;
         if (dev->GetDevice() == device)
         {
-            UsbDeviceLeft(i);
+            UsbDeviceLeftIterator(i);
             break;
         }
     }
 }
 
-void UsbDeviceManager::UsbDeviceLeft(std::vector<FadeCandyDevicePtr>::iterator iter)
+std::vector<FadeCandyDevicePtr>::iterator UsbDeviceManager::UsbDeviceLeftIterator(std::vector<FadeCandyDevicePtr>::iterator iter)
 {
-    FadeCandyDevicePtr device = *iter;
-    std::clog << "USB device removed.\n";
+    std::cout << "USB device removed.\n";
+
+    if (IDeviceDiscoverListenerPtr listener = m_discoverListener.lock())
+    {
+        listener->OnDeviceRemoved(std::dynamic_pointer_cast<IWriteablePixelEndpoint>(*iter));
+    }
     
-    m_deviceList.erase(iter);
+    return m_deviceList.erase(iter);
 }
 
 void UsbDeviceManager::WorkerLoop()
@@ -118,7 +124,8 @@ void UsbDeviceManager::WorkerLoop()
             }
 
             // Look for devices that were removed
-            for (std::vector<FadeCandyDevicePtr>::iterator i = m_deviceList.begin(), e = m_deviceList.end(); i != e; ++i)
+            std::vector<FadeCandyDevicePtr>::iterator i = m_deviceList.begin();
+            while(i != m_deviceList.end())
             {
                 FadeCandyDevicePtr device = *i;
                 libusb_device *usbdev = device->GetDevice();
@@ -134,7 +141,11 @@ void UsbDeviceManager::WorkerLoop()
 
                 if (isRemoved)
                 {
-                    UsbDeviceLeft(i);
+                    i = UsbDeviceLeftIterator(i);
+                }
+                else
+                {
+                    i++;
                 }
             }
 

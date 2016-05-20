@@ -3,7 +3,8 @@
 
 FadeCandyDevice::FadeCandyDevice(libusb_device* device) :
     m_Device(device),
-    m_NumFramesPending(0)
+    m_NumFramesPending(0),
+    m_Handle(nullptr)
 {
     // Setup firmware config
     memset(&m_FirmwareConfig, 0, sizeof m_FirmwareConfig);
@@ -25,6 +26,14 @@ FadeCandyDevice::~FadeCandyDevice()
         UsbTransferPtr trans = *i;
         libusb_cancel_transfer(trans->transfer);
     }
+
+    // Close the device if we opened it.
+    if (m_Handle)
+    {
+        libusb_release_interface(m_Handle, 0);
+        libusb_close(m_Handle);
+        m_Handle = nullptr;
+    }    
 }
 
 bool FadeCandyDevice::Probe(libusb_device *device)

@@ -35,6 +35,9 @@
     <ProjectReference Include="..\libusb\msvc\libusb_static_2015.vcxproj">
       <Project>{349ee8f9-7d25-4909-aaf5-ff3fade72187}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\LightFX\LightFX\LightFX.vcxproj">
+      <Project>{8c2942d4-ed1d-4064-b590-eea6e8463710}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{81B17183-AC47-418D-AA37-EE395B4C5BE0}</ProjectGuid>
@@ -49,7 +52,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -86,8 +89,8 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(IncludePath)</IncludePath>
+  <PropertyGroup>
+    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

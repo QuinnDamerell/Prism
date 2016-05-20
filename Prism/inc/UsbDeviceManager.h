@@ -24,7 +24,7 @@ private:
 
     // Called when a usb is lost
     void UsbDeviceLeft(libusb_device *device);
-    void UsbDeviceLeft(std::vector<FadeCandyDevicePtr>::iterator iter);
+    std::vector<FadeCandyDevicePtr>::iterator UsbDeviceLeftIterator(std::vector<FadeCandyDevicePtr>::iterator iter);
 
     // A function used for the worker thread.
     void WorkerLoop();
