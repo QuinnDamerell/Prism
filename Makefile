@@ -36,7 +36,7 @@ INCLUDES += -ILightFX/LightFX/inc/Layers
 INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable
 INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Color
 INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Draw
-INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Fade
+INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Intensity
 
 CLEAN_FILES += LightFX/LightFX/src/*.d LightFX/LightFX/src/*.o LightFX/LightFX/src/Layers/Drawable/*.d LightFX/LightFX/src/Layers/Drawable/*.o
 CPPFLAGS += -Wno-strict-aliasing -fexceptions
