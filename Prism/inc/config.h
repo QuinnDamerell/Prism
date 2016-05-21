@@ -1,5 +1,7 @@
 #pragma once
 
+// This config is used for libusb only on Linux'
+
 /*
  * Android build config for libusb
  * Copyright © 2012-2013 RealVNC Ltd. <toby.gray@realvnc.com>

@@ -13,6 +13,7 @@ int main(int argc, char **argv)
     // Kick it off
     mysticalStone->Prismify();
     
+    // Sleep this thread forever
     while(true)
     {
         sleep(999999999);

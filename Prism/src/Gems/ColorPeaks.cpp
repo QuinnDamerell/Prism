@@ -16,7 +16,7 @@ void ColorPeaks::OnSetup(PanelPtr mainPanel)
 {
     // Create the background layer and set it into the main panel
     SolidColorLayerPtr background = std::make_shared<SolidColorLayer>();
-    background->SetColor(Pixel(1, 0, 0, .2));
+    background->SetColor(Pixel(1, 0, .2, 0));
     mainPanel->AddLayer(std::dynamic_pointer_cast<ILayer>(background), 100);
     
     // Create a drawable layer, we will use this later to make the peaks

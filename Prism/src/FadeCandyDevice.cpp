@@ -94,9 +94,11 @@ void FadeCandyDevice::WriteConfiguration()
 
 void FadeCandyDevice::WriteColorConfig()
 {
+    // Setup the packets
     Packet mColorLUT[LUT_PACKETS];
     memset(mColorLUT, 0, sizeof mColorLUT);
-    for (unsigned i = 0; i < LUT_PACKETS; ++i) {
+    for (unsigned i = 0; i < LUT_PACKETS; ++i) 
+    {
         mColorLUT[i].control = TYPE_LUT | i;
     }
     mColorLUT[LUT_PACKETS - 1].control |= FINAL;
@@ -105,13 +107,16 @@ void FadeCandyDevice::WriteColorConfig()
     const unsigned firstByteOffset = 1;  // Skip padding byte
     unsigned byteOffset = firstByteOffset;
 
-    double gamma = 1.0;                         // Power for nonlinear portion of curve
+    // Use the default values
+    double gamma = 1.0;                           // Power for nonlinear portion of curve
     double whitepoint[3] = { 1.0, 1.0, 1.0 };     // White-point RGB value (also, global brightness)
-    double linearSlope = 1.0;                   // Slope (output / input) of linear section of the curve, near zero
+    double linearSlope = 1.0;                     // Slope (output / input) of linear section of the curve, near zero
     double linearCutoff = 0.0;
 
-    for (unsigned channel = 0; channel < 3; channel++) {
-        for (unsigned entry = 0; entry < LUT_ENTRIES; entry++) {
+    for (unsigned channel = 0; channel < 3; channel++) 
+    {
+        for (unsigned entry = 0; entry < LUT_ENTRIES; entry++) 
+        {
             double output;
 
             /*
@@ -125,17 +130,16 @@ void FadeCandyDevice::WriteColorConfig()
             input *= whitepoint[channel];
 
             // Is this entry part of the linear section still?
-            if (input * linearSlope <= linearCutoff) {
-
+            if (input * linearSlope <= linearCutoff) 
+            {
                 // Output value is below linearCutoff. We're still in the linear portion of the curve
                 output = input * linearSlope;
 
             }
-            else {
-
+            else 
+            {
                 // Nonlinear portion of the curve. This starts right where the linear portion leaves
                 // off. We need to avoid any discontinuity.
-
                 double nonlinearInput = input - (linearSlope * linearCutoff);
                 double scale = 1.0 - linearCutoff;
                 output = linearCutoff + pow(nonlinearInput / scale, gamma) * scale;
@@ -148,18 +152,16 @@ void FadeCandyDevice::WriteColorConfig()
             // Store LUT entry, little-endian order.
             packet->data[byteOffset++] = uint8_t(intValue);
             packet->data[byteOffset++] = uint8_t(intValue >> 8);
-            if (byteOffset >= sizeof packet->data) {
+            if (byteOffset >= sizeof packet->data) 
+            {
                 byteOffset = firstByteOffset;
                 packet++;
             }
         }
     }
 
+    // Submit the config
     SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &mColorLUT, sizeof mColorLUT, OTHER, false));
-
-
-    // Start asynchronously sending the LUT.
-    //submitTransfer(new Transfer(this, &mColorLUT, sizeof mColorLUT));
 }
 
 void FadeCandyDevice::WritePixels(uint8_t* pixelArray, uint64_t length)
@@ -197,10 +199,7 @@ void FadeCandyDevice::WriteFramebuffer()
     }
 
     // Submit the frame.
-    if (SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &m_framebuffer, sizeof m_framebuffer, FRAME, true)))
-    {
-        //m_NumFramesPending++;
-    }
+    SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &m_framebuffer, sizeof m_framebuffer, FRAME, true));
 }
 
 
@@ -213,6 +212,12 @@ bool FadeCandyDevice::SubmitTransfer(UsbTransferPtr transPtr)
 
         // Do the transfer
         int r = libusb_bulk_transfer(m_Handle, 1, (unsigned char*)(transPtr->transfer->buffer), transPtr->transfer->length, &transferedAmmount, 2000);
+
+        // Write the error if write failed
+        if (r < 0)
+        {
+            std::clog << "Error submitting USB transfer: " << libusb_strerror(libusb_error(r)) << "\n";
+        }
 
         // Return if we succeeded.
         return r <= 0;
