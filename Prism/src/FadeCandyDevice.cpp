@@ -95,7 +95,6 @@ void FadeCandyDevice::WriteConfiguration()
 void FadeCandyDevice::WriteColorConfig()
 {
     Packet mColorLUT[LUT_PACKETS];
-    // Color LUT headers
     memset(mColorLUT, 0, sizeof mColorLUT);
     for (unsigned i = 0; i < LUT_PACKETS; ++i) {
         mColorLUT[i].control = TYPE_LUT | i;

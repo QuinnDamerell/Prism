@@ -44,7 +44,7 @@ CPPFLAGS += -Wno-strict-aliasing -fexceptions
 ###########################################################################
 # PrismPi
 
-TARGET := PrismPiRunner
+TARGET := PrismPi.out
 
 CPP_FILES += \
 	PrismPi/main.cpp \
@@ -145,6 +145,7 @@ ifeq ($(UNAME), Linux)
 		libusb/libusb/os/poll_posix.c \
 		libusb/libusb/os/threads_posix.c
 
+	INCLUDES += -IPrismPi
 	LIBS += -lpthread -lrt
 	CPPFLAGS += -DOS_LINUX -DTHREADS_POSIX -DPOLL_NFDS_TYPE=nfds_t \
 		-DLIBUSB_CALL= -DDEFAULT_VISIBILITY= -DHAVE_GETTIMEOFDAY -DHAVE_POLL_H \
