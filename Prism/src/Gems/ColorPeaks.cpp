@@ -4,7 +4,7 @@
 #include "Layers/SolidColorLayer.h"
 #include "Layers/Drawable/Draw/DrawablePixel.h"
 #include "Layers/Drawable/Color/ConstantColorable.h"
-#include "Layers/Drawable/Fade/SimpleFade.h"
+#include "Layers/Drawable/Intensity/SimpleIntensityFade.h"
 
 using namespace LightFx;
 using namespace LightFx::Layers;
@@ -16,7 +16,7 @@ void ColorPeaks::OnSetup(PanelPtr mainPanel)
 {
     // Create the background layer and set it into the main panel
     SolidColorLayerPtr background = std::make_shared<SolidColorLayer>();
-    background->SetColor(Pixel(1, 0, .2, 0));
+    background->SetColor(LightColor(1, 0, 0, 0.05));
     mainPanel->AddLayer(std::dynamic_pointer_cast<ILayer>(background), 100);
     
     // Create a drawable layer, we will use this later to make the peaks
@@ -45,11 +45,11 @@ void ColorPeaks::OnPreRender(uint64_t tick, std::chrono::milliseconds elapsedTim
         DrawablePixelPtr pixel = std::make_shared<DrawablePixel>(postitionDist(m_randomDevice), postitionDist(m_randomDevice));
 
         // Give it a constant color but random color
-        Pixel randomColor = GenerateRandomColor();
+        LightColor randomColor = GenerateRandomColor();
         ConstantColorablePtr color = std::make_shared<ConstantColorable>(randomColor);
 
         // Add a fade effect to fade the pixel in quickly. 
-        SimpleFadePtr fade = std::make_shared<SimpleFade>(0, 1.0, milliseconds(800));
+        SimpleIntensityFadePtr fade = std::make_shared<SimpleIntensityFade>(0, 1.0, milliseconds(800));
 
         // When this fade is done we will reverse it in the callback and then kill the drawable
         fade->SetFinishedCallback(shared_from_this());
@@ -82,7 +82,7 @@ void ColorPeaks::OnTimelineFinished(TimelineObjectPtr timeline)
     timeline->SetDuration(milliseconds(6000));
 
     // Cast to a simple fade to set the to and from
-    SimpleFadePtr simpleFade = std::dynamic_pointer_cast<SimpleFade>(timeline);
+    SimpleIntensityFadePtr simpleFade = std::dynamic_pointer_cast<SimpleIntensityFade>(timeline);
     if (simpleFade)
     {
         simpleFade->SetToAndFrom(0, 1);
