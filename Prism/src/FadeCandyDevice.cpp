@@ -1,4 +1,7 @@
+#include <algorithm>
 #include <iostream>
+#include <cstring>
+
 #include "FadeCandyDevice.h"
 
 FadeCandyDevice::FadeCandyDevice(libusb_device* device) :
@@ -12,7 +15,8 @@ FadeCandyDevice::FadeCandyDevice(libusb_device* device) :
 
     // Framebuffer headers
     memset(m_framebuffer, 0, sizeof m_framebuffer);
-    for (unsigned i = 0; i < FRAMEBUFFER_PACKETS; ++i) {
+    for (unsigned i = 0; i < FRAMEBUFFER_PACKETS; ++i) 
+    {
         m_framebuffer[i].control = TYPE_FRAMEBUFFER | i;
     }
     m_framebuffer[FRAMEBUFFER_PACKETS - 1].control |= FINAL;
@@ -86,9 +90,77 @@ void FadeCandyDevice::WriteConfiguration()
 
     // Write the config to the device
     SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &m_FirmwareConfig, sizeof m_FirmwareConfig, OTHER, false));
+}
 
-    byte pix[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    WritePixels(pix, 5);
+void FadeCandyDevice::WriteColorConfig()
+{
+    Packet mColorLUT[LUT_PACKETS];
+    // Color LUT headers
+    memset(mColorLUT, 0, sizeof mColorLUT);
+    for (unsigned i = 0; i < LUT_PACKETS; ++i) {
+        mColorLUT[i].control = TYPE_LUT | i;
+    }
+    mColorLUT[LUT_PACKETS - 1].control |= FINAL;
+
+    Packet *packet = mColorLUT;
+    const unsigned firstByteOffset = 1;  // Skip padding byte
+    unsigned byteOffset = firstByteOffset;
+
+    double gamma = 1.0;                         // Power for nonlinear portion of curve
+    double whitepoint[3] = { 1.0, 1.0, 1.0 };     // White-point RGB value (also, global brightness)
+    double linearSlope = 1.0;                   // Slope (output / input) of linear section of the curve, near zero
+    double linearCutoff = 0.0;
+
+    for (unsigned channel = 0; channel < 3; channel++) {
+        for (unsigned entry = 0; entry < LUT_ENTRIES; entry++) {
+            double output;
+
+            /*
+            * Normalized input value corresponding to this LUT entry.
+            * Ranges from 0 to slightly higher than 1. (The last LUT entry
+            * can't quite be reached.)
+            */
+            double input = (entry << 8) / 65535.0;
+
+            // Scale by whitepoint before anything else
+            input *= whitepoint[channel];
+
+            // Is this entry part of the linear section still?
+            if (input * linearSlope <= linearCutoff) {
+
+                // Output value is below linearCutoff. We're still in the linear portion of the curve
+                output = input * linearSlope;
+
+            }
+            else {
+
+                // Nonlinear portion of the curve. This starts right where the linear portion leaves
+                // off. We need to avoid any discontinuity.
+
+                double nonlinearInput = input - (linearSlope * linearCutoff);
+                double scale = 1.0 - linearCutoff;
+                output = linearCutoff + pow(nonlinearInput / scale, gamma) * scale;
+            }
+
+            // Round to the nearest integer, and clamp. Overflow-safe.
+            int64_t longValue = (output * 0xFFFF) + 0.5;
+            int intValue = std::max<int64_t>(0, std::min<int64_t>(0xFFFF, longValue));
+
+            // Store LUT entry, little-endian order.
+            packet->data[byteOffset++] = uint8_t(intValue);
+            packet->data[byteOffset++] = uint8_t(intValue >> 8);
+            if (byteOffset >= sizeof packet->data) {
+                byteOffset = firstByteOffset;
+                packet++;
+            }
+        }
+    }
+
+    SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &mColorLUT, sizeof mColorLUT, OTHER, false));
+
+
+    // Start asynchronously sending the LUT.
+    //submitTransfer(new Transfer(this, &mColorLUT, sizeof mColorLUT));
 }
 
 void FadeCandyDevice::WritePixels(uint8_t* pixelArray, uint64_t length)

@@ -8,8 +8,8 @@
 #include "Layers/Drawable/DrawableLayer.h"
 #include "Layers/Drawable/TimelineObject.h"
 
-#define PEAK_CREATE_TIME_MAX_MS 960
-#define PEAK_CREATE_TIME_MIN_MS 800
+#define PEAK_CREATE_TIME_MAX_MS 2000
+#define PEAK_CREATE_TIME_MIN_MS 1200
 
 namespace Gems
 {

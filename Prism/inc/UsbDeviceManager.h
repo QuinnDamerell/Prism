@@ -3,6 +3,7 @@
 #include <chrono>
 #include <mutex>
 #include <vector>
+#include <thread>
 #include <libusb.h>
 
 #include "Common.h"

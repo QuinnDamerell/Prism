@@ -48,7 +48,7 @@ public:
 private:
 
     // The device manager
-    UsbDeviceManagerUniquePtr m_usbDeviceManager;
+    UsbDeviceManagerPtr m_usbDeviceManager;
 
     // Holds a pixel endpoint if we have one.
     IWriteablePixelEndpointWeakPtr m_pixelEndpoint;

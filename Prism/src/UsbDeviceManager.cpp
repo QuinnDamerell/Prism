@@ -11,7 +11,7 @@ int UsbDeviceManager::Setup(IDeviceDiscoverListenerWeakPtr discoverListener)
     if (libusb_init(&m_libusbContext))
     {
         std::clog << "Error initializing USB library!\n";
-        return 7;
+        throw std::runtime_error("Error initializing USB library!");
     }
 
     // Grab the listener
@@ -43,6 +43,8 @@ void UsbDeviceManager::UsbDeviceArrived(libusb_device *newDevice)
 
     // Write the config
     device->WriteConfiguration();
+
+    device->WriteColorConfig();
     
     // Add to our list
     m_deviceList.push_back(device);

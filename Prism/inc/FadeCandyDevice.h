@@ -9,6 +9,10 @@
 
 #ifdef OS_LINUX
 // No need to copy the buffer
+
+// Adding this for now
+#define NEED_COPY_USB_TRANSFER_BUFFER 1
+
 #elif defined(_MSC_VER)
 #define NEED_COPY_USB_TRANSFER_BUFFER 1
 #elif OS_DARWIN
@@ -67,6 +71,9 @@ public:
 
     // Called when we should write the config
     void WriteConfiguration();
+
+    // Called when should write the color config
+    void WriteColorConfig();
 
     // Called when we want to write pixels.
     void WritePixels(uint8_t* pixelArray, uint64_t length);

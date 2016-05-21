@@ -1,10 +1,10 @@
 
-#include "Gems\ColorPeaks.h"
+#include "Gems/ColorPeaks.h"
 
-#include "Layers\SolidColorLayer.h"
-#include "Layers\Drawable\Draw\DrawablePixel.h"
-#include "Layers\Drawable\Color\ConstantColorable.h"
-#include "Layers\Drawable\Fade\SimpleFade.h"
+#include "Layers/SolidColorLayer.h"
+#include "Layers/Drawable/Draw/DrawablePixel.h"
+#include "Layers/Drawable/Color/ConstantColorable.h"
+#include "Layers/Drawable/Fade/SimpleFade.h"
 
 using namespace LightFx;
 using namespace LightFx::Layers;

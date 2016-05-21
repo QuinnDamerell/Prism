@@ -1,5 +1,6 @@
 #include <iostream>
 #include <exception>
+#include <memory>
 
 #include "Prism.h"
 #include "libusb.h"
@@ -16,11 +17,11 @@ using namespace Gems;
 void Prism::AlignCrystals()
 {
     // Start up the usb device manager, this will watch for new usb devices.
-    m_usbDeviceManager = std::make_unique<UsbDeviceManager>();
+    m_usbDeviceManager = std::make_shared<UsbDeviceManager>();
     if (int ret = m_usbDeviceManager->Setup(std::dynamic_pointer_cast<IDeviceDiscoverListener>(shared_from_this())) < 0)
     {
         std::cout << "Failed to setup usb device manager";
-        throw std::exception("Failed to setup usb device manager");
+        throw std::runtime_error("Failed to setup usb device manager");
     }
 
     // Create the main light panel
@@ -44,7 +45,7 @@ void Prism::Prismify()
 {
     if (!m_driver)
     {
-        throw std::exception("Setup hasn't been called!");
+        throw std::runtime_error("Setup hasn't been called!");
     }
 
     // Create the gems
