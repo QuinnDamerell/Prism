@@ -7,7 +7,9 @@ CPP_FILES += \
 	Prism/src/FadeCandyDevice.cpp \
 	Prism/src/Prism.cpp \
 	Prism/src/UsbDeviceManager.cpp \
-	Prism/src/Gems/ColorPeaks.cpp
+	Prism/src/Gems/ColorPeaks.cpp \
+	Prism/src/Gems/RandomColorGem.cpp \
+	Prism/src/Gems/SolidColorGem.cpp
 
 INCLUDES += -IPrism/interface
 INCLUDES += -IPrism/inc/Gems
@@ -27,16 +29,18 @@ CPP_FILES += \
 	LightFX/LightFX/src/OutputBitmap.cpp \
 	LightFX/LightFX/src/ConstantRateDriver.cpp \
 	LightFX/LightFX/src/Bitmap.cpp \
-	LightFX/LightFX/src/Layers/Drawable/DrawableLayer.cpp \
-	LightFX/LightFX/src/Layers/Drawable/SimpleColorableBase.cpp \
-	LightFX/LightFX/src/Layers/Drawable/SimpleDrawableBase.cpp
+	LightFX/LightFX/src/Drawable/Drawable.cpp \
+	LightFX/LightFX/src/Drawable/SolidDrawable.cpp \
+	LightFX/LightFX/src/Fadables/Fader.cpp 
 
 INCLUDES += -ILightFX/LightFX/inc
-INCLUDES += -ILightFX/LightFX/inc/Layers
-INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable
-INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Color
-INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Draw
-INCLUDES += -ILightFX/LightFX/inc/Layers/Drawable/Intensity
+INCLUDES += -ILightFX/LightFX/inc/Colorables
+INCLUDES += -ILightFX/LightFX/inc/Drawables
+INCLUDES += -ILightFX/LightFX/inc/Fadeables
+INCLUDES += -ILightFX/LightFX/interfaces
+INCLUDES += -ILightFX/LightFX/interfaces/Colorables
+INCLUDES += -ILightFX/LightFX/interfaces/Drawables
+INCLUDES += -ILightFX/LightFX/interfaces/Fadables
 
 CLEAN_FILES += LightFX/LightFX/src/*.d LightFX/LightFX/src/*.o LightFX/LightFX/src/Layers/Drawable/*.d LightFX/LightFX/src/Layers/Drawable/*.o
 CPPFLAGS += -Wno-strict-aliasing -fexceptions

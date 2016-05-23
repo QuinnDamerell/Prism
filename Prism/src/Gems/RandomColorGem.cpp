@@ -1,7 +1,9 @@
 #include "Gems/RandomColorGem.h"
+#include "Fadables/Fader.h"
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
+using namespace LightFx::Fadables;
 using namespace Gems;
 
 // Called when the gem should setup.
@@ -18,6 +20,12 @@ void RandomColorGem::OnSetup(IDrawablePtr mainLayer)
             m_pixelArray[x][y] = std::make_shared<SolidDrawable>();
             m_pixelArray[x][y]->SetPosition(x, y, 1, 1);
             mainLayer->AddDrawable(m_pixelArray[x][y], 5);
+
+            // Make faders for them also.
+            FaderPtr fader = std::make_shared<Fader>();
+            fader->SetFrom(0);
+            fader->SetTo(1);
+            m_pixelArray[x][y]->SetFader(fader);
         }
     }
 }
@@ -37,5 +45,8 @@ void RandomColorGem::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime
 {
     // Select a random pixel
     std::uniform_int_distribution<int> dist(0, m_pixelArray.size() - 1);
-    m_pixelArray[dist(m_randomDevice)][dist(m_randomDevice)]->SetColor(GenerateRandomColor(true));
+    int x = dist(m_randomDevice);
+    int y = dist(m_randomDevice);
+    m_pixelArray[x][y]->SetColor(GenerateRandomColor(true));
+    m_pixelArray[x][y]->GetFader()->SetDuration(milliseconds(3000));
 }

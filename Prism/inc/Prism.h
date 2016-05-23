@@ -10,7 +10,7 @@
 #include "ConstantRateDriver.h"
 #include "IDrivable.h"
 #include "IGem.h"
-#include "Drawables\IDrawable.h"
+#include "Drawables/IDrawable.h"
 
 #define GEM_RUNNING_TIME_MAX_SECONDS 60
 #define GEM_RUNNING_TIME_MIN_SECONDS 20

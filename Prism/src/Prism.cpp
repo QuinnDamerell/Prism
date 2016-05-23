@@ -7,14 +7,15 @@
 
 #include "Panel.h"
 #include "OutputBitmap.h"
-#include "Drawables\Drawable.h"
-#include "IIntensityObject.h"
+#include "Drawables/Drawable.h"
+#include "Fadables/Fader.h"
 
 #include "Gems/SolidColorGem.h"
 #include "Gems/RandomColorGem.h"
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
+using namespace LightFx::Fadables;
 using namespace Gems;
 
 // Setup
@@ -30,6 +31,9 @@ void Prism::AlignCrystals()
 
     // Create the main light panel
     m_lightPanel = std::make_shared<Panel>(8, 8);
+
+    // Make it not so bright.
+    m_lightPanel->SetIntensity(.2);
 
     // Register for render complete callbacks
     m_lightPanel->SetPanelRenderedCallback(std::dynamic_pointer_cast<IPanelRenderedCallback>(shared_from_this()));
@@ -80,13 +84,13 @@ void Prism::Prismify()
         // And add it to the list
         m_gemList.insert(m_gemList.end(), GemPanelPair(gem, gemLayer));
 
-        // Trun off the panel
-        IIntensityObjectPtr intensityObj = std::dynamic_pointer_cast<IIntensityObject>(gemLayer);
-        if (intensityObj)
-        {
-            intensityObj->SetIntensity(0.0);
-        }
-    }
+        // Turn off the panel
+        gemLayer->SetIntensity(0);
+
+        // Make a fader and add it to the drawable
+        IFaderPtr fader = std::make_shared<Fader>();
+        gemLayer->SetFader(fader);
+     }
 
     // Run at 60fps.
     m_driver->Start(milliseconds(16));
@@ -158,12 +162,11 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
         {
             m_gemList[m_activeGemIndex].first->OnDeactivated();
 
-            // Trun off the panel
-            IIntensityObjectPtr intensityObj = std::dynamic_pointer_cast<IIntensityObject>(m_gemList[m_activeGemIndex].second);
-            if(intensityObj)
-            {
-                intensityObj->SetIntensity(0);
-            }
+            // Fade the panel out
+            IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
+            fader->SetFrom(1.0);
+            fader->SetTo(0);
+            fader->SetDuration(milliseconds(3000));
         }
 
         // Update the active number
@@ -172,11 +175,10 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
         // Activate it
         m_gemList[m_activeGemIndex].first->OnActivated();
 
-        // Set the intensity of the panel
-        IIntensityObjectPtr intensityObj = std::dynamic_pointer_cast<IIntensityObject>(m_gemList[m_activeGemIndex].second);
-        if (intensityObj)
-        {
-            intensityObj->SetIntensity(1.0);
-        }
+        // Fade in the panel        
+        IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
+        fader->SetFrom(0);
+        fader->SetTo(1.0);
+        fader->SetDuration(milliseconds(3000));
     }
 }
