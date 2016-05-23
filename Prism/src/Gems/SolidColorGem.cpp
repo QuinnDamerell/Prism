@@ -1,7 +1,9 @@
 #include "Gems/SolidColorGem.h"
+#include "Colorables/RainbowColorer.h"
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
+using namespace LightFx::Colorables;
 using namespace Gems;
 
 // Called when the gem should setup.
@@ -15,6 +17,10 @@ void SolidColorGem::OnSetup(IDrawablePtr mainLayer)
 
     // Dim the panel a little so it isn't so bright.
     m_soldColor->SetIntensity(0.4);
+
+    // Make a rainbow color
+    RainbowColorerPtr coloer = std::make_shared<RainbowColorer>();
+    m_soldColor->SetColorer(coloer);
 
     // Add the layer
     mainLayer->AddDrawable(m_soldColor, 5);
@@ -33,15 +39,4 @@ void SolidColorGem::OnDeactivated()
 // Called just before the prism will render
 void SolidColorGem::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 {
-    m_timeUsedInCycle -= elapsedTime;
-    if (m_timeUsedInCycle.count() < 0)
-    {
-        m_timeUsedInCycle = m_fullCycleTime;
-    }
-
-    // Figure out how far we are
-    double progress = static_cast<double>(m_timeUsedInCycle.count()) / static_cast<double>(m_fullCycleTime.count());
-
-    // Set the color    
-    m_soldColor->SetColor(GetRainbowColor(progress));
 }

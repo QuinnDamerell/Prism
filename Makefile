@@ -34,7 +34,9 @@ CPP_FILES += \
 	LightFX/LightFX/src/TimelineObject.cpp \
 	LightFX/LightFX/src/Drawable/Drawable.cpp \
 	LightFX/LightFX/src/Drawable/SolidDrawable.cpp \
-	LightFX/LightFX/src/Fadables/Fader.cpp 
+	LightFX/LightFX/src/Fadables/Fader.cpp \
+	LightFX/LightFX/src/Colorables/Colorer.cpp \
+	LightFX/LightFX/src/Colorables/RainbowColorer.cpp \
 
 INCLUDES += -ILightFX/LightFX/inc
 INCLUDES += -ILightFX/LightFX/inc/Colorables
@@ -46,7 +48,7 @@ INCLUDES += -ILightFX/LightFX/interfaces/Drawables
 INCLUDES += -ILightFX/LightFX/interfaces/Fadables
 
 CLEAN_FILES += LightFX/LightFX/src/*.d LightFX/LightFX/src/*.o LightFX/LightFX/src/Drawable/*.d LightFX/LightFX/src/Drawable/*.o
-CLEAN_FILES += LightFX/LightFX/src/Fadables/*.d LightFX/LightFX/src/Fadables/*.o
+CLEAN_FILES += LightFX/LightFX/src/Fadables/*.d LightFX/LightFX/src/Fadables/*.o LightFX/LightFX/src/Colorables/*.d LightFX/LightFX/src/Colorables/*.o
 CPPFLAGS += -Wno-strict-aliasing -fexceptions
 
 ###########################################################################

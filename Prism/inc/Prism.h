@@ -13,7 +13,7 @@
 #include "Drawables/IDrawable.h"
 
 #define GEM_RUNNING_TIME_MAX_SECONDS 60
-#define GEM_RUNNING_TIME_MIN_SECONDS 20
+#define GEM_RUNNING_TIME_MIN_SECONDS 40
 
 typedef std::pair<IGemPtr, LightFx::Drawables::IDrawablePtr> GemPanelPair;
 

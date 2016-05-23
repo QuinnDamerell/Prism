@@ -203,5 +203,5 @@ void Prism::SetIntensity(double intensity)
     // And now set the fade
     fader->SetFrom(m_lightPanel->GetIntensity());
     fader->SetTo(intensity);
-    fader->SetDuration(milliseconds(3000));
+    fader->SetDuration(milliseconds(2000));
 }
