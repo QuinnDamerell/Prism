@@ -45,7 +45,8 @@ INCLUDES += -ILightFX/LightFX/interfaces/Colorables
 INCLUDES += -ILightFX/LightFX/interfaces/Drawables
 INCLUDES += -ILightFX/LightFX/interfaces/Fadables
 
-CLEAN_FILES += LightFX/LightFX/src/*.d LightFX/LightFX/src/*.o LightFX/LightFX/src/Layers/Drawable/*.d LightFX/LightFX/src/Layers/Drawable/*.o
+CLEAN_FILES += LightFX/LightFX/src/*.d LightFX/LightFX/src/*.o LightFX/LightFX/src/Drawable/*.d LightFX/LightFX/src/Drawable/*.o
+CLEAN_FILES += LightFX/LightFX/src/Fadables/*.d LightFX/LightFX/src/Fadables/*.o
 CPPFLAGS += -Wno-strict-aliasing -fexceptions
 
 ###########################################################################
