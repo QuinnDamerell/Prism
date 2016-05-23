@@ -13,6 +13,9 @@ void SolidColorGem::OnSetup(IDrawablePtr mainLayer)
     // Set the size
     m_soldColor->SetPosition(0, 0, mainLayer->GetHeight(), mainLayer->GetWitdh());
 
+    // Dim the panel a little so it isn't so bright.
+    m_soldColor->SetIntensity(0.4);
+
     // Add the layer
     mainLayer->AddDrawable(m_soldColor, 5);
 }

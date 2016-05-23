@@ -48,6 +48,12 @@
     <ClInclude Include="inc\Gems\RandomColorGem.h">
       <Filter>inc\Gems</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Gems\RunningPixel.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PrismCommandHost.h">
+      <Filter>inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\UsbDeviceManager.cpp">
@@ -67,6 +73,12 @@
     </ClCompile>
     <ClCompile Include="src\Gems\RandomColorGem.cpp">
       <Filter>src\Gems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gems\RunningPixel.cpp">
+      <Filter>src\Gems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrismCommandHost.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

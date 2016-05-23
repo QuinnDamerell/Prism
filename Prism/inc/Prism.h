@@ -48,6 +48,9 @@ public:
     // Fired when the panel has rendered
     void OnPanelRendered() override;
 
+    // Sets the intensity on the main panel.
+    void SetIntensity(double intensity);
+
 private:
 
     // The device manager

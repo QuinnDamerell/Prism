@@ -13,6 +13,7 @@
 #include "Gems/SolidColorGem.h"
 #include "Gems/RandomColorGem.h"
 #include "Gems/ColorPeaks.h"
+#include "Gems/RunningPixel.h"
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
@@ -32,9 +33,6 @@ void Prism::AlignCrystals()
 
     // Create the main light panel
     m_lightPanel = std::make_shared<Panel>(8, 8);
-
-    // Make it not so bright.
-    //m_lightPanel->SetIntensity(1);
 
     // Register for render complete callbacks
     m_lightPanel->SetPanelRenderedCallback(std::dynamic_pointer_cast<IPanelRenderedCallback>(shared_from_this()));
@@ -64,15 +62,18 @@ void Prism::Prismify()
         IGemPtr gem;
         switch (i)
         {
+        case 3:
+            gem = std::make_shared<SolidColorGem>();
+            break;
         case 2:
             gem = std::make_shared<RandomColorGem>();
             break;
         case 1:
-            gem = std::make_shared<SolidColorGem>();
+            gem = std::make_shared<ColorPeaks>();
             break;
         case 0:
         default:
-            gem = std::make_shared<ColorPeaks>();
+            gem = std::make_shared<RunningPixel>();
             break;
         }
 
@@ -185,4 +186,22 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
         fader->SetTo(1.0);
         fader->SetDuration(milliseconds(3000));
     }
+}
+
+// Sets the intensity of the main panel.
+void Prism::SetIntensity(double intensity)
+{
+    // Create a fader if we don't have one.
+    if (!m_lightPanel->GetFader())
+    {
+        FaderPtr fader = std::make_shared<Fader>(0, 1, milliseconds(0));
+        m_lightPanel->SetFader(fader);
+    }
+
+    IFaderPtr fader = m_lightPanel->GetFader();
+
+    // And now set the fade
+    fader->SetFrom(m_lightPanel->GetIntensity());
+    fader->SetTo(intensity);
+    fader->SetDuration(milliseconds(3000));
 }

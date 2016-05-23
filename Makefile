@@ -6,10 +6,12 @@ TARGET := prism
 CPP_FILES += \
 	Prism/src/FadeCandyDevice.cpp \
 	Prism/src/Prism.cpp \
+	Prism/src/PrismCommandHost.cpp \
 	Prism/src/UsbDeviceManager.cpp \
 	Prism/src/Gems/ColorPeaks.cpp \
 	Prism/src/Gems/RandomColorGem.cpp \
-	Prism/src/Gems/SolidColorGem.cpp
+	Prism/src/Gems/SolidColorGem.cpp \
+	Prism/src/Gems/RunningPixel.cpp
 
 INCLUDES += -IPrism/interface
 INCLUDES += -IPrism/inc/Gems

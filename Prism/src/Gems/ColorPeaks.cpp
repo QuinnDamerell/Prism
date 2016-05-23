@@ -39,8 +39,10 @@ void ColorPeaks::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
         m_timeUntilPeak = milliseconds(timeRemainDist(m_randomDevice));
 
         // Create a drawable pixel and place is randomly
+        // NOTE: We send true to solid drawable to incate we want it to be auto cleaned up
+        // when the fade is complete.
         std::uniform_int_distribution<int> postitionDist(0, m_gridSize - 1);
-        SolidDrawablePtr pixel = std::make_shared<SolidDrawable>();
+        SolidDrawablePtr pixel = std::make_shared<SolidDrawable>(true);
         pixel->SetPosition(postitionDist(m_randomDevice), postitionDist(m_randomDevice), 1, 1);
 
         // Give it a constant color but random color
@@ -68,10 +70,7 @@ void ColorPeaks::OnTimelineFinished(ITimelineObjectPtr timeline)
     // First, remove our callback.
     std::weak_ptr<ITimelineObjectCallback> emptyCallback;
     timeline->SetFinishedCallback(emptyCallback);
-
-    // Also set the drawable to clean up when this fade out is done.
-    //timeline->ShouldCleanupWhenFinshed(true);
-   
+  
     // Cast to a simple fade to set the to and from
     FaderPtr simpleFade = std::dynamic_pointer_cast<Fader>(timeline);
     if (simpleFade)
