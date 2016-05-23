@@ -12,6 +12,7 @@
 
 #include "Gems/SolidColorGem.h"
 #include "Gems/RandomColorGem.h"
+#include "Gems/ColorPeaks.h"
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
@@ -33,7 +34,7 @@ void Prism::AlignCrystals()
     m_lightPanel = std::make_shared<Panel>(8, 8);
 
     // Make it not so bright.
-    m_lightPanel->SetIntensity(.2);
+    //m_lightPanel->SetIntensity(1);
 
     // Register for render complete callbacks
     m_lightPanel->SetPanelRenderedCallback(std::dynamic_pointer_cast<IPanelRenderedCallback>(shared_from_this()));
@@ -56,19 +57,22 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    const uint8_t gemCount = 2;
+    const uint8_t gemCount = 3;
     for (uint8_t i = 0; i < gemCount; i++)
     {
         // Create the Gem
         IGemPtr gem;
         switch (i)
         {
-        case 1:
+        case 2:
             gem = std::make_shared<RandomColorGem>();
+            break;
+        case 1:
+            gem = std::make_shared<SolidColorGem>();
             break;
         case 0:
         default:
-            gem = std::make_shared<SolidColorGem>();
+            gem = std::make_shared<ColorPeaks>();
             break;
         }
 

@@ -29,6 +29,7 @@ CPP_FILES += \
 	LightFX/LightFX/src/OutputBitmap.cpp \
 	LightFX/LightFX/src/ConstantRateDriver.cpp \
 	LightFX/LightFX/src/Bitmap.cpp \
+	LightFX/LightFX/src/TimelineObject.cpp \
 	LightFX/LightFX/src/Drawable/Drawable.cpp \
 	LightFX/LightFX/src/Drawable/SolidDrawable.cpp \
 	LightFX/LightFX/src/Fadables/Fader.cpp 
