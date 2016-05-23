@@ -7,10 +7,14 @@
 
 #include "Panel.h"
 #include "OutputBitmap.h"
+#include "Drawables\Drawable.h"
+#include "IIntensityObject.h"
 
-#include "Gems/ColorPeaks.h"
+#include "Gems/SolidColorGem.h"
+#include "Gems/RandomColorGem.h"
 
 using namespace LightFx;
+using namespace LightFx::Drawables;
 using namespace Gems;
 
 // Setup
@@ -48,10 +52,41 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    // Create the gems
-    IGemPtr gem = std::make_shared<ColorPeaks>();
-    gem->OnSetup(m_lightPanel);
-    m_gemList.insert(m_gemList.end(), gem);
+    const uint8_t gemCount = 2;
+    for (uint8_t i = 0; i < gemCount; i++)
+    {
+        // Create the Gem
+        IGemPtr gem;
+        switch (i)
+        {
+        case 1:
+            gem = std::make_shared<RandomColorGem>();
+            break;
+        case 0:
+        default:
+            gem = std::make_shared<SolidColorGem>();
+            break;
+        }
+
+        // Make a new panel for the Gem
+        IDrawablePtr gemLayer = std::make_shared<Drawable>();
+
+        // Add the layer to our base
+        m_lightPanel->AddDrawable(gemLayer, i);
+
+        // Setup the gem
+        gem->OnSetup(gemLayer);
+
+        // And add it to the list
+        m_gemList.insert(m_gemList.end(), GemPanelPair(gem, gemLayer));
+
+        // Trun off the panel
+        IIntensityObjectPtr intensityObj = std::dynamic_pointer_cast<IIntensityObject>(gemLayer);
+        if (intensityObj)
+        {
+            intensityObj->SetIntensity(0.0);
+        }
+    }
 
     // Run at 60fps.
     m_driver->Start(milliseconds(16));
@@ -63,7 +98,7 @@ void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)
     CheckForGemSwtich(elapsedTime);
 
     // Send the tick to the active panel
-    m_gemList[m_activeGemIndex]->OnPreRender(tick, elapsedTime);
+    m_gemList[m_activeGemIndex].first->OnTick(tick, elapsedTime);
 }
 
 // Fired when a device is added.
@@ -121,13 +156,27 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
         // Tell the current gem it is going away.
         if (m_activeGemIndex < m_gemList.size())
         {
-            m_gemList[m_activeGemIndex]->OnDeactivated();
+            m_gemList[m_activeGemIndex].first->OnDeactivated();
+
+            // Trun off the panel
+            IIntensityObjectPtr intensityObj = std::dynamic_pointer_cast<IIntensityObject>(m_gemList[m_activeGemIndex].second);
+            if(intensityObj)
+            {
+                intensityObj->SetIntensity(0);
+            }
         }
 
         // Update the active number
         m_activeGemIndex = newActiveGemIndex;
 
         // Activate it
-        m_gemList[m_activeGemIndex]->OnActivated();
+        m_gemList[m_activeGemIndex].first->OnActivated();
+
+        // Set the intensity of the panel
+        IIntensityObjectPtr intensityObj = std::dynamic_pointer_cast<IIntensityObject>(m_gemList[m_activeGemIndex].second);
+        if (intensityObj)
+        {
+            intensityObj->SetIntensity(1.0);
+        }
     }
 }

@@ -3,14 +3,16 @@
 #include <chrono>
 
 #include "Common.h"
-#include "Panel.h"
+#include "Drawables\IDrawable.h"
+#include "IDrivable.h"
 
 DECLARE_SMARTPOINTER(IGem);
-class IGem
+class IGem :
+    public LightFx::IDrivable
 {
 public:
     // Called when the gem should setup.
-    virtual void OnSetup(LightFx::PanelPtr mainPanel) = 0;
+    virtual void OnSetup(LightFx::Drawables::IDrawablePtr mainLayer) = 0;
 
     // Called when it is activated and will be displayed.
     virtual void OnActivated() = 0;
@@ -19,6 +21,6 @@ public:
     virtual void OnDeactivated() = 0;
 
     // Called just before the prism will render
-    virtual void OnPreRender(uint64_t tick, std::chrono::milliseconds elapsedTime) = 0;
+    virtual void OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime) = 0;
 };
 #pragma once

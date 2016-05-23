@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(SolutionDir)\Prism\inc;$(SolutionDir)\Prism\interface;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Prism\inc;$(SolutionDir)\Prism\interface;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\LightFx\LightFx\inc\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

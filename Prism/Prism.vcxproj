@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="inc\Common.h" />
     <ClInclude Include="inc\Gems\ColorPeaks.h" />
+    <ClInclude Include="inc\Gems\RandomColorGem.h" />
+    <ClInclude Include="inc\Gems\SolidColorGem.h" />
     <ClInclude Include="inc\Prism.h" />
     <ClInclude Include="inc\FadeCandyDevice.h" />
     <ClInclude Include="inc\UsbDeviceManager.h" />
@@ -30,6 +32,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Gems\ColorPeaks.cpp" />
+    <ClCompile Include="src\Gems\RandomColorGem.cpp" />
+    <ClCompile Include="src\Gems\SolidColorGem.cpp" />
     <ClCompile Include="src\Prism.cpp" />
     <ClCompile Include="src\FadeCandyDevice.cpp" />
     <ClCompile Include="src\UsbDeviceManager.cpp" />
@@ -93,7 +97,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc\;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

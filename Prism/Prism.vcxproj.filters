@@ -42,6 +42,12 @@
     <ClInclude Include="inc\Gems\ColorPeaks.h">
       <Filter>inc\Gems</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Gems\SolidColorGem.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Gems\RandomColorGem.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\UsbDeviceManager.cpp">
@@ -54,6 +60,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Gems\ColorPeaks.cpp">
+      <Filter>src\Gems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gems\SolidColorGem.cpp">
+      <Filter>src\Gems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gems\RandomColorGem.cpp">
       <Filter>src\Gems</Filter>
     </ClCompile>
   </ItemGroup>

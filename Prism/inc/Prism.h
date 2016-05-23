@@ -10,9 +10,12 @@
 #include "ConstantRateDriver.h"
 #include "IDrivable.h"
 #include "IGem.h"
+#include "Drawables\IDrawable.h"
 
 #define GEM_RUNNING_TIME_MAX_SECONDS 60
 #define GEM_RUNNING_TIME_MIN_SECONDS 20
+
+typedef std::pair<IGemPtr, LightFx::Drawables::IDrawablePtr> GemPanelPair;
 
 DECLARE_SMARTPOINTER(Prism);
 class Prism :
@@ -66,7 +69,7 @@ private:
     // Gem logic
     uint8_t m_activeGemIndex;
     LightFx::milliseconds m_activeGemTimeRemaing;
-    std::vector<IGemPtr> m_gemList;
+    std::vector<GemPanelPair> m_gemList;
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);
