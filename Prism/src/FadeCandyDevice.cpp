@@ -89,7 +89,7 @@ void FadeCandyDevice::WriteConfiguration()
     m_FirmwareConfig.data[0] = CFLAG_LED_CONTROL;
 
     // Write the config to the device
-    SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &m_FirmwareConfig, sizeof m_FirmwareConfig, OTHER, false));
+    SubmitTransfer(std::make_shared<UsbTransfer>(GetSharedPtr<FadeCandyDevice>(), &m_FirmwareConfig, sizeof m_FirmwareConfig, OTHER, false));
 }
 
 void FadeCandyDevice::WriteColorConfig()
@@ -161,7 +161,7 @@ void FadeCandyDevice::WriteColorConfig()
     }
 
     // Submit the config
-    SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &mColorLUT, sizeof mColorLUT, OTHER, false));
+    SubmitTransfer(std::make_shared<UsbTransfer>(GetSharedPtr<FadeCandyDevice>(), &mColorLUT, sizeof mColorLUT, OTHER, false));
 }
 
 void FadeCandyDevice::WritePixels(uint8_t* pixelArray, uint64_t length)
@@ -199,7 +199,7 @@ void FadeCandyDevice::WriteFramebuffer()
     }
 
     // Submit the frame.
-    SubmitTransfer(std::make_shared<UsbTransfer>(shared_from_this(), &m_framebuffer, sizeof m_framebuffer, FRAME, true));
+    SubmitTransfer(std::make_shared<UsbTransfer>(GetSharedPtr<FadeCandyDevice>(), &m_framebuffer, sizeof m_framebuffer, FRAME, true));
 }
 
 

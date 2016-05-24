@@ -16,6 +16,9 @@ void PrismCommandHost::Run()
     // Set it up
     mysticalStone->AlignCrystals();
 
+    // Turn it down a little
+    mysticalStone->SetIntensity(.8);
+
     // Kick it off
     mysticalStone->Prismify();
 

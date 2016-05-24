@@ -13,7 +13,8 @@ namespace Gems
         public IGem
     {
     public:
-        RandomColorGem() 
+        RandomColorGem() :
+            m_skipValue(0)
         { }
 
         // Called when the gem should setup.
@@ -35,5 +36,8 @@ namespace Gems
 
         // Rand device
         std::random_device m_randomDevice;
+
+        // Skip value
+        int64_t m_skipValue;
     };
 }

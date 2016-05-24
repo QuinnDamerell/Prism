@@ -6,6 +6,7 @@
 
 #include "Common.h"
 #include "IWriteablePixelEndpoint.h"
+#include "SharedFromThisHelper.h"
 
 #ifdef OS_LINUX
 // No need to copy the buffer
@@ -57,7 +58,7 @@ public:
 
 class FadeCandyDevice :
     public IWriteablePixelEndpoint,
-    public std::enable_shared_from_this<FadeCandyDevice>
+    public LightFx::SharedFromThis
 {
 public:
     // Checks to see if this is a FC device

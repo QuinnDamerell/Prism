@@ -52,7 +52,7 @@ void ColorPeaks::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
         FaderPtr fade = std::make_shared<Fader>(1, 0, milliseconds(800));
 
         // When this fade is done we will reverse it in the callback and then kill the drawable
-        fade->SetFinishedCallback(shared_from_this());
+        fade->SetFinishedCallback(GetSharedPtr<ITimelineObjectCallback>());
 
         // Add the fade to the pixel
         pixel->SetFader(fade);

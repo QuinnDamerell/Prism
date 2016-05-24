@@ -43,10 +43,18 @@ void RandomColorGem::OnDeactivated()
 // Called just before the prism will render
 void RandomColorGem::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 {
+    // Only make a change every 5 renders.
+    m_skipValue--;
+    if (m_skipValue > 0)
+    {
+        return;       
+    }
+    m_skipValue = 5;
+
     // Select a random pixel
     std::uniform_int_distribution<int> dist(0, m_pixelArray.size() - 1);
     int x = dist(m_randomDevice);
     int y = dist(m_randomDevice);
     m_pixelArray[x][y]->SetColor(GenerateRandomColor(true));
-    m_pixelArray[x][y]->GetFader()->SetDuration(milliseconds(3000));
+    m_pixelArray[x][y]->GetFader()->SetDuration(milliseconds(2000));
 }

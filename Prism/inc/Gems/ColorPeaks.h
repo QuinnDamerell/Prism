@@ -6,6 +6,7 @@
 #include "IGem.h"
 
 #include "TimelineObject.h"
+#include "SharedFromThisHelper.h"
 #include "Drawables/Drawable.h"
 
 #define PEAK_CREATE_TIME_MAX_MS 2000
@@ -17,7 +18,7 @@ namespace Gems
     class ColorPeaks :
         public IGem,
         public LightFx::ITimelineObjectCallback,
-        public std::enable_shared_from_this<ColorPeaks>
+        public LightFx::SharedFromThis
     {
     public:
         ColorPeaks() :

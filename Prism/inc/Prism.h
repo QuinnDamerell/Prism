@@ -6,6 +6,7 @@
 #include "UsbDeviceManager.h"
 #include "IDeviceDiscoveryListener.h"
 #include "IWriteablePixelEndpoint.h"
+#include "SharedFromThisHelper.h"
 #include "Panel.h"
 #include "ConstantRateDriver.h"
 #include "IDrivable.h"
@@ -22,7 +23,7 @@ class Prism :
     public IDeviceDiscoverListener,
     public LightFx::IPanelRenderedCallback,
     public LightFx::IDrivable,
-    public std::enable_shared_from_this<Prism>
+    public LightFx::SharedFromThis
 {
 public:
     Prism() :

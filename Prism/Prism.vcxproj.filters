@@ -54,6 +54,9 @@
     <ClInclude Include="inc\PrismCommandHost.h">
       <Filter>inc</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Gems\SwipeColorGem.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\UsbDeviceManager.cpp">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="src\PrismCommandHost.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gems\SwipeColorGem.cpp">
+      <Filter>src\Gems</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
