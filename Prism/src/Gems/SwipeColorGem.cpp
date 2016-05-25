@@ -10,8 +10,13 @@ using namespace Gems;
 // Called when the gem should setup.
 void SwipeColorGem::OnSetup(IDrawablePtr mainLayer)
 {
-    // Capture the main layer
-    m_mainLayer = mainLayer;
+    // Create a layer so we can dim this a little
+    DrawablePtr dimmedLayer = std::make_shared<Drawable>();
+    dimmedLayer->SetIntensity(0.3);
+    m_mainLayer = dimmedLayer;
+
+    // Add the layer
+    mainLayer->AddDrawable(dimmedLayer, 50);
 }
 
 // Called when it is activated and will be displayed.

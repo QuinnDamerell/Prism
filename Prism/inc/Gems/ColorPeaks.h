@@ -9,8 +9,8 @@
 #include "SharedFromThisHelper.h"
 #include "Drawables/Drawable.h"
 
-#define PEAK_CREATE_TIME_MAX_MS 2000
-#define PEAK_CREATE_TIME_MIN_MS 700
+#define PEAK_CREATE_TIME_MAX_MS 1700
+#define PEAK_CREATE_TIME_MIN_MS 400
 
 namespace Gems
 {
