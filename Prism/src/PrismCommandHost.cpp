@@ -1,10 +1,11 @@
 #include <string>
 #include <iostream>
+#include <thread>
 
 #include "PrismCommandHost.h"
 #include "Prism.h"
 
-void PrismCommandHost::Run()
+void PrismCommandHost::Run(bool blockOnInput)
 {
     PrintMessage("Creating the prism...");
 
@@ -17,23 +18,36 @@ void PrismCommandHost::Run()
     mysticalStone->AlignCrystals();
 
     // Turn it down a little
-    mysticalStone->SetIntensity(.8);
+    mysticalStone->SetIntensity(0.7);
 
     // Kick it off
     mysticalStone->Prismify();
 
     PrintMessage("Running");
 
-    PrintMessage("Enter An Intensity: ");
-
-    // Now we will block forever waiting for command line input.
-    for (std::string line; std::getline(std::cin, line);)
+    if (blockOnInput)
     {
-        // try to get an intensity.
-        double intensity = ::atof(line.c_str());
-        mysticalStone->SetIntensity(intensity);
-        std::cout << "Setting intensity to " << intensity << std::endl;
+        PrintMessage("Enter An Intensity: ");
+
+        // Now we will block forever waiting for command line input.
+        for (std::string line; std::getline(std::cin, line);)
+        {
+            // try to get an intensity.
+            double intensity = ::atof(line.c_str());
+            mysticalStone->SetIntensity(intensity);
+            std::cout << "Setting intensity to " << intensity << std::endl;
+        }
     }
+    else
+    {
+        // If we don't want to block on input just sleep this thread for a long time.
+        while (true)
+        {
+            std::this_thread::sleep_for(std::chrono::hours(6));
+        }
+    }
+
+
 
     // This should never return.
     return;

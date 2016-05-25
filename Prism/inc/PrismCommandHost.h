@@ -10,7 +10,7 @@ class PrismCommandHost
 public:
     // When called this will setup prism and block forever waiting on
     // commands.
-    void Run();
+    void Run(bool blockOnInput = true);
 
 private:
     void PrintMessage(std::string message);

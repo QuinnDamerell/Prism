@@ -13,8 +13,12 @@
 
 int main(int argc, char **argv)
 {
+    bool isBackground = false;
     if(argc > 1)
     {
+        // Indicate we are running in the background.
+        isBackground = true;
+        
         // If we have an arguemnt launch as a daemon        
         pid_t pid, sid;
         
@@ -61,7 +65,7 @@ int main(int argc, char **argv)
     PrismCommandHostPtr prism = std::make_shared<PrismCommandHost>();
 
     // This will block forever
-    prism->Run();
+    prism->Run(!isBackground);
 
     // This should never return.
     return 0;
