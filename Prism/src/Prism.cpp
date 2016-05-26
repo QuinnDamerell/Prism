@@ -57,7 +57,7 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    const uint8_t gemCount = 1; // Exclude SoldColorGem
+    const uint8_t gemCount = 5; // Exclude SoldColorGem
     for (uint8_t i = 0; i < gemCount; i++)
     {
         // Create the Gem
