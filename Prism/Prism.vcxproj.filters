@@ -95,7 +95,7 @@
     <ClCompile Include="src\Gems\ExpandingDropsGem.cpp">
       <Filter>src\Gems</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gems\RowRunner.cpp">
+    <ClCompile Include="src\Gems\RowRunnerGem.cpp">
       <Filter>src\Gems</Filter>
     </ClCompile>
   </ItemGroup>

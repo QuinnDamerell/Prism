@@ -39,7 +39,7 @@
     <ClCompile Include="src\Gems\ColorPeaks.cpp" />
     <ClCompile Include="src\Gems\ExpandingDropsGem.cpp" />
     <ClCompile Include="src\Gems\RandomColorGem.cpp" />
-    <ClCompile Include="src\Gems\RowRunner.cpp" />
+    <ClCompile Include="src\Gems\RowRunnerGem.cpp" />
     <ClCompile Include="src\Gems\RunningPixel.cpp" />
     <ClCompile Include="src\Gems\SolidColorGem.cpp" />
     <ClCompile Include="src\Gems\SwipeColorGem.cpp" />
