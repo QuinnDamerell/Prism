@@ -29,7 +29,6 @@ void RunningPixel::OnActivated()
 void RunningPixel::OnDeactivated()
 { }
 
-int moveRedirect = 0;
 // Called just before the prism will render
 void RunningPixel::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 {
@@ -97,7 +96,7 @@ void RunningPixel::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 
         // Set the direction
         m_currentDirection = newDirection;
-        moveRedirect = -1;
+        m_moveRedirect = -1;
     }
 
     // Now update the move redirect if we need to.

@@ -60,6 +60,9 @@
     <ClInclude Include="inc\Gems\ExpandingDropsGem.h">
       <Filter>inc\Gems</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Gems\RowRunnerGem.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\UsbDeviceManager.cpp">
@@ -90,6 +93,9 @@
       <Filter>src\Gems</Filter>
     </ClCompile>
     <ClCompile Include="src\Gems\ExpandingDropsGem.cpp">
+      <Filter>src\Gems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gems\RowRunner.cpp">
       <Filter>src\Gems</Filter>
     </ClCompile>
   </ItemGroup>

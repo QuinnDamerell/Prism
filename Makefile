@@ -13,7 +13,8 @@ CPP_FILES += \
 	Prism/src/Gems/SolidColorGem.cpp \
 	Prism/src/Gems/RunningPixel.cpp \
 	Prism/src/Gems/ExpandingDropsGem.cpp \
-	Prism/src/Gems/SwipeColorGem.cpp	
+	Prism/src/Gems/SwipeColorGem.cpp \
+	Prism/src/Gems/RowRunnerGem.cpp
 
 INCLUDES += -IPrism/interface
 INCLUDES += -IPrism/inc/Gems

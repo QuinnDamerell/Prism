@@ -16,6 +16,8 @@
 #include "Gems/RunningPixel.h"
 #include "Gems/SwipeColorGem.h"
 #include "Gems/ExpandingDropsGem.h"
+#include "Gems/RowRunnerGem.h"
+
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
@@ -57,31 +59,34 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    const uint8_t gemCount = 5; // Exclude SoldColorGem
+    const uint8_t gemCount = 6; // Exclude SoldColorGem
     for (uint8_t i = 0; i < gemCount; i++)
     {
         // Create the Gem
         IGemPtr gem;
         switch (i)
         {
-        case 5:
+        case 6:
             gem = std::make_shared<SolidColorGem>();
             break;
-        case 4:
+        case 5:
             gem = std::make_shared<RandomColorGem>();
             break;
-        case 3:
+        case 4:
             gem = std::make_shared<ColorPeaks>();
             break;
-        case 2:
+        case 3:
             gem = std::make_shared<SwipeColorGem>();
             break;
-        case 1:
+        case 2:
             gem = std::make_shared<RunningPixel>();
+            break;
+        case 1:
+            gem = std::make_shared<ExpandingDropsGem>();
             break;
         case 0:
         default:
-            gem = std::make_shared<ExpandingDropsGem>();
+            gem = std::make_shared<RowRunnerGem>();
             break;
         }
 
@@ -190,7 +195,7 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
 
         // Fade in the panel        
         IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
-        fader->SetFrom(0);
+        fader->SetFrom(m_gemList[m_activeGemIndex].second->GetIntensity());
         fader->SetTo(1.0);
         fader->SetDuration(milliseconds(3000));
     }

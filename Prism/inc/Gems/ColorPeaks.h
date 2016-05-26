@@ -52,6 +52,6 @@ namespace Gems
         std::chrono::milliseconds m_timeUntilPeak;
 
         // Grid size
-        uint64_t m_gridSize;
+        int64_t m_gridSize;
     };
 }
