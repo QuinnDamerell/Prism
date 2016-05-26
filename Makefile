@@ -12,6 +12,7 @@ CPP_FILES += \
 	Prism/src/Gems/RandomColorGem.cpp \
 	Prism/src/Gems/SolidColorGem.cpp \
 	Prism/src/Gems/RunningPixel.cpp \
+	Prism/src/Gems/ExpandingDropsGem.cpp \
 	Prism/src/Gems/SwipeColorGem.cpp	
 
 INCLUDES += -IPrism/interface
@@ -36,9 +37,11 @@ CPP_FILES += \
 	LightFX/LightFX/src/Drawables/Drawable.cpp \
 	LightFX/LightFX/src/Drawables/SolidDrawable.cpp \
 	LightFX/LightFX/src/Drawables/SwipeDrawable.cpp \
+	LightFX/LightFX/src/Drawables/ExpandingDrawable.cpp \
 	LightFX/LightFX/src/Fadables/Fader.cpp \
 	LightFX/LightFX/src/Colorables/Colorer.cpp \
 	LightFX/LightFX/src/Colorables/RainbowColorer.cpp \
+	LightFX/LightFX/src/Colorables/CrossfadeColorer.cpp
 
 INCLUDES += -ILightFX/LightFX/inc
 INCLUDES += -ILightFX/LightFX/inc/Colorables
