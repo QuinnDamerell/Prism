@@ -15,6 +15,7 @@
 #include "Gems/ColorPeaks.h"
 #include "Gems/RunningPixel.h"
 #include "Gems/SwipeColorGem.h"
+#include "Gems/ExpandingDropsGem.h"
 
 using namespace LightFx;
 using namespace LightFx::Drawables;
@@ -56,28 +57,31 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    const uint8_t gemCount = 4; // Exclude SoldColorGem
+    const uint8_t gemCount = 1; // Exclude SoldColorGem
     for (uint8_t i = 0; i < gemCount; i++)
     {
         // Create the Gem
         IGemPtr gem;
         switch (i)
         {
-        case 4:
+        case 5:
             gem = std::make_shared<SolidColorGem>();
             break;
-        case 3:
+        case 4:
             gem = std::make_shared<RandomColorGem>();
             break;
-        case 2:
+        case 3:
             gem = std::make_shared<ColorPeaks>();
             break;
-        case 1:
+        case 2:
             gem = std::make_shared<SwipeColorGem>();
+            break;
+        case 1:
+            gem = std::make_shared<RunningPixel>();
             break;
         case 0:
         default:
-            gem = std::make_shared<RunningPixel>();
+            gem = std::make_shared<ExpandingDropsGem>();
             break;
         }
 
