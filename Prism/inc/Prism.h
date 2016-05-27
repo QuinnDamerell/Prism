@@ -23,12 +23,14 @@ class Prism :
     public IDeviceDiscoverListener,
     public LightFx::IPanelRenderedCallback,
     public LightFx::IDrivable,
-    public LightFx::SharedFromThis
+    public LightFx::SharedFromThis,
+    public LightFx::ITimelineObjectCallback
 {
 public:
     Prism() :
         m_activeGemIndex(999),
-        m_activeGemTimeRemaing(0)
+        m_activeGemTimeRemaing(0),
+        m_animateOutGem(nullptr)
     { }
 
     // Preforms setup.
@@ -52,6 +54,9 @@ public:
     // Sets the intensity on the main panel.
     void SetIntensity(double intensity);
 
+    // Fired when a panel fade is complete
+    void OnTimelineFinished(LightFx::ITimelineObjectPtr timeline);
+
 private:
 
     // The device manager
@@ -74,6 +79,7 @@ private:
     uint8_t m_activeGemIndex;
     LightFx::milliseconds m_activeGemTimeRemaing;
     std::vector<GemPanelPair> m_gemList;
+    IGemPtr m_animateOutGem;
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);

@@ -107,6 +107,7 @@ void Prism::Prismify()
 
         // Make a fader and add it to the drawable
         IFaderPtr fader = std::make_shared<Fader>();
+        fader->SetFinishedCallback(GetSharedPtr<ITimelineObjectCallback>());
         gemLayer->SetFader(fader);
      }
 
@@ -118,6 +119,13 @@ void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)
 {
     // Check if we need to switch gems
     CheckForGemSwtich(elapsedTime);
+
+    // If we have a panel we are fading out keep animating them until
+    // they are faded out
+    if (auto local = m_animateOutGem)
+    {
+        local->OnTick(tick, elapsedTime);
+    }
 
     // Send the tick to the active panel
     m_gemList[m_activeGemIndex].first->OnTick(tick, elapsedTime);
@@ -185,6 +193,9 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
             fader->SetFrom(1.0);
             fader->SetTo(0);
             fader->SetDuration(milliseconds(3000));
+
+            // Set the panel as our animate fade out so the panel keeps animating as it fades away
+            m_animateOutGem = m_gemList[m_activeGemIndex].first;
         }
 
         // Update the active number
@@ -217,4 +228,15 @@ void Prism::SetIntensity(double intensity)
     fader->SetFrom(m_lightPanel->GetIntensity());
     fader->SetTo(intensity);
     fader->SetDuration(milliseconds(2000));
+}
+
+// Fired when a panel fade is complete
+void Prism::OnTimelineFinished(ITimelineObjectPtr timeline)
+{
+    IFaderPtr fader = std::dynamic_pointer_cast<IFader>(timeline);
+    if (fader && fader->GetTo() < 0.001)
+    {
+        // If this was a fade out clear our animate out gem ptr
+        m_animateOutGem = nullptr;
+    }
 }
