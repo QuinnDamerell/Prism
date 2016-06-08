@@ -2,7 +2,10 @@
 
 #include <random>
 
+
 #include "Common.h"
+#include "WebServer/WebServer.h"
+
 #include "UsbDeviceManager.h"
 #include "IDeviceDiscoveryListener.h"
 #include "IWriteablePixelEndpoint.h"
@@ -83,4 +86,7 @@ private:
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);
+
+    // Web server object
+    WebServerPtr m_webServer;
 };

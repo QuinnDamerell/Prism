@@ -49,6 +49,10 @@ void Prism::AlignCrystals()
 
     // Add the panel
     m_driver->AddDriveable(std::dynamic_pointer_cast<IDrivable>(m_lightPanel)); 
+
+    // Make the web server
+    m_webServer = std::make_shared<WebServer>();
+    m_webServer->Setup();
 }
 
 // Starts the prism
@@ -113,6 +117,9 @@ void Prism::Prismify()
 
     // Run at 60fps.
     m_driver->Start(milliseconds(16));
+
+    // Run the web server
+    m_webServer->Start();
 }
 
 void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)

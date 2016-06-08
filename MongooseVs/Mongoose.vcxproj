@@ -18,64 +18,20 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="inc\Common.h" />
-    <ClInclude Include="inc\Gems\ColorPeaks.h" />
-    <ClInclude Include="inc\Gems\ExpandingDropsGem.h" />
-    <ClInclude Include="inc\Gems\RandomColorGem.h" />
-    <ClInclude Include="inc\Gems\RowRunnerGem.h" />
-    <ClInclude Include="inc\Gems\RunningPixel.h" />
-    <ClInclude Include="inc\Gems\SolidColorGem.h" />
-    <ClInclude Include="inc\Gems\SwipeColorGem.h" />
-    <ClInclude Include="inc\Prism.h" />
-    <ClInclude Include="inc\FadeCandyDevice.h" />
-    <ClInclude Include="inc\PrismCommandHost.h" />
-    <ClInclude Include="inc\UsbDeviceManager.h" />
-    <ClInclude Include="inc\WebServer\IWebCommandHandler.h" />
-    <ClInclude Include="inc\WebServer\WebServer.h" />
-    <ClInclude Include="interface\IDeviceDiscoveryListener.h" />
-    <ClInclude Include="interface\IGem.h" />
-    <ClInclude Include="interface\IWriteablePixelEndpoint.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Gems\ColorPeaks.cpp" />
-    <ClCompile Include="src\Gems\ExpandingDropsGem.cpp" />
-    <ClCompile Include="src\Gems\RandomColorGem.cpp" />
-    <ClCompile Include="src\Gems\RowRunnerGem.cpp" />
-    <ClCompile Include="src\Gems\RunningPixel.cpp" />
-    <ClCompile Include="src\Gems\SolidColorGem.cpp" />
-    <ClCompile Include="src\Gems\SwipeColorGem.cpp" />
-    <ClCompile Include="src\Prism.cpp" />
-    <ClCompile Include="src\FadeCandyDevice.cpp" />
-    <ClCompile Include="src\PrismCommandHost.cpp" />
-    <ClCompile Include="src\UsbDeviceManager.cpp" />
-    <ClCompile Include="src\WebServer\WebServer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\libusb\msvc\libusb_static_2015.vcxproj">
-      <Project>{349ee8f9-7d25-4909-aaf5-ff3fade72187}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\LightFX\LightFX\LightFX.vcxproj">
-      <Project>{8c2942d4-ed1d-4064-b590-eea6e8463710}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\MongooseVs\Mongoose.vcxproj">
-      <Project>{67ff3961-cf5e-4ccd-9297-55a918018e94}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{81B17183-AC47-418D-AA37-EE395B4C5BE0}</ProjectGuid>
-    <RootNamespace>Prism</RootNamespace>
+    <ProjectGuid>{67FF3961-CF5E-4CCD-9297-55A918018E94}</ProjectGuid>
+    <RootNamespace>Mongoose</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -113,8 +69,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\mongoose\;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../mongoose/</IncludePath>
   </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);MG_ENABLE_THREADS;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -155,6 +116,14 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\mongoose\mongoose.c" >
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\mongoose\mongoose.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
