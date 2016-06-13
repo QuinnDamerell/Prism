@@ -34,7 +34,7 @@ public:
     virtual void OnConfigChange(rapidjson::Document& oldConfig, rapidjson::Document& newConfig);
 
     // Fired when a command has been issued
-    virtual void OnCommand(rapidjson::Document& command);
+    virtual void OnCommand(rapidjson::Document& request, rapidjson::Document& response);
 
 private:
     // Holds the callback reference
