@@ -22,7 +22,7 @@ void RapcomHost::OnConfigChange(rapidjson::Document& oldConfig, rapidjson::Docum
 }
 
 // Fired when a command has been issued
-void RapcomHost::OnCommand(rapidjson::Document& command)
+void RapcomHost::OnCommand(rapidjson::Document& request, rapidjson::Document& response)
 {
 
 }
