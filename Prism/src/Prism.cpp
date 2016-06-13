@@ -18,7 +18,7 @@
 #include "Gems/ExpandingDropsGem.h"
 #include "Gems/RowRunnerGem.h"
 
-
+using namespace Rapcom;
 using namespace LightFx;
 using namespace LightFx::Drawables;
 using namespace LightFx::Fadables;
@@ -50,9 +50,9 @@ void Prism::AlignCrystals()
     // Add the panel
     m_driver->AddDriveable(std::dynamic_pointer_cast<IDrivable>(m_lightPanel)); 
 
-    // Make the web server
-    m_webServer = std::make_shared<WebServer>();
-    m_webServer->Setup();
+    // Make our rapcom host
+    m_rapcomHost = std::make_shared<RapcomHost>(GetWeakPtr<IControlCommandHandler>());
+    m_rapcomHost->Initialize();
 }
 
 // Starts the prism
@@ -118,8 +118,8 @@ void Prism::Prismify()
     // Run at 60fps.
     m_driver->Start(milliseconds(16));
 
-    // Run the web server
-    m_webServer->Start();
+    // Set our initial intensity
+    SetIntensity(GetDoubleOrDefault(m_rapcomHost->GetConfig(), "Intensity", 0.85));
 }
 
 void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)
@@ -235,6 +235,11 @@ void Prism::SetIntensity(double intensity)
     fader->SetFrom(m_lightPanel->GetIntensity());
     fader->SetTo(intensity);
     fader->SetDuration(milliseconds(2000));
+}
+
+double Prism::GetIntensity()
+{
+    return m_lightPanel->GetIntensity();
 }
 
 // Fired when a panel fade is complete

@@ -16,12 +16,6 @@
     <Filter Include="inc\Gems">
       <UniqueIdentifier>{35149fd2-00a3-45f0-83f3-00f015f11c23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\WebServer">
-      <UniqueIdentifier>{4ee9ebfb-bb1e-4c5d-b413-101d54cf117e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\WebServer">
-      <UniqueIdentifier>{d9509909-3c5e-489c-814c-1bf2326b7bea}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Common.h">
@@ -69,11 +63,11 @@
     <ClInclude Include="inc\Gems\RowRunnerGem.h">
       <Filter>inc\Gems</Filter>
     </ClInclude>
-    <ClInclude Include="inc\WebServer\WebServer.h">
-      <Filter>inc\WebServer</Filter>
+    <ClInclude Include="interface\IControlCommandHandler.h">
+      <Filter>interface</Filter>
     </ClInclude>
-    <ClInclude Include="inc\WebServer\IWebCommandHandler.h">
-      <Filter>inc\WebServer</Filter>
+    <ClInclude Include="inc\RapcomHost.h">
+      <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,8 +104,8 @@
     <ClCompile Include="src\Gems\RowRunnerGem.cpp">
       <Filter>src\Gems</Filter>
     </ClCompile>
-    <ClCompile Include="src\WebServer\WebServer.cpp">
-      <Filter>src\WebServer</Filter>
+    <ClCompile Include="src\RapcomHost.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

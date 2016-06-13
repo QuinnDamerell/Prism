@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\RapcomHost.h" />
     <ClInclude Include="inc\Common.h" />
     <ClInclude Include="inc\Gems\ColorPeaks.h" />
     <ClInclude Include="inc\Gems\ExpandingDropsGem.h" />
@@ -31,8 +32,7 @@
     <ClInclude Include="inc\FadeCandyDevice.h" />
     <ClInclude Include="inc\PrismCommandHost.h" />
     <ClInclude Include="inc\UsbDeviceManager.h" />
-    <ClInclude Include="inc\WebServer\IWebCommandHandler.h" />
-    <ClInclude Include="inc\WebServer\WebServer.h" />
+    <ClInclude Include="interface\IControlCommandHandler.h" />
     <ClInclude Include="interface\IDeviceDiscoveryListener.h" />
     <ClInclude Include="interface\IGem.h" />
     <ClInclude Include="interface\IWriteablePixelEndpoint.h" />
@@ -48,8 +48,8 @@
     <ClCompile Include="src\Prism.cpp" />
     <ClCompile Include="src\FadeCandyDevice.cpp" />
     <ClCompile Include="src\PrismCommandHost.cpp" />
+    <ClCompile Include="src\RapcomHost.cpp" />
     <ClCompile Include="src\UsbDeviceManager.cpp" />
-    <ClCompile Include="src\WebServer\WebServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libusb\msvc\libusb_static_2015.vcxproj">
@@ -60,6 +60,9 @@
     </ProjectReference>
     <ProjectReference Include="..\MongooseVs\Mongoose.vcxproj">
       <Project>{67ff3961-cf5e-4ccd-9297-55a918018e94}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Rapcom\Rapcom.vcxproj">
+      <Project>{b002884e-341f-43ff-a970-04d5093c960b}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -113,7 +116,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\mongoose\;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\mongoose;$(SolutionDir)\rapidjson\include;$(SolutionDir)\Rapcom\inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

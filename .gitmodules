@@ -10,3 +10,6 @@
 [submodule "mongoose"]
 	path = mongoose
 	url = https://github.com/cesanta/mongoose.git
+[submodule "Rapcom"]
+	path = Rapcom
+	url = https://github.com/QuinnDamerell/Rapcom.git

@@ -2,11 +2,11 @@
 
 #include <random>
 
-
 #include "Common.h"
-#include "WebServer/WebServer.h"
 
+#include "RapcomHost.h"
 #include "UsbDeviceManager.h"
+#include "IControlCommandHandler.h"
 #include "IDeviceDiscoveryListener.h"
 #include "IWriteablePixelEndpoint.h"
 #include "SharedFromThisHelper.h"
@@ -24,6 +24,7 @@ typedef std::pair<IGemPtr, LightFx::Drawables::IDrawablePtr> GemPanelPair;
 DECLARE_SMARTPOINTER(Prism);
 class Prism :
     public IDeviceDiscoverListener,
+    public IControlCommandHandler,
     public LightFx::IPanelRenderedCallback,
     public LightFx::IDrivable,
     public LightFx::SharedFromThis,
@@ -54,11 +55,17 @@ public:
     // Fired when the panel has rendered
     void OnPanelRendered() override;
 
+    // Fired when a panel fade is complete
+    void OnTimelineFinished(LightFx::ITimelineObjectPtr timeline);
+
+    //
+    // IControlCommandHandler
+
     // Sets the intensity on the main panel.
     void SetIntensity(double intensity);
 
-    // Fired when a panel fade is complete
-    void OnTimelineFinished(LightFx::ITimelineObjectPtr timeline);
+    // Gets the intensity on the main panel.
+    double GetIntensity();
 
 private:
 
@@ -77,6 +84,9 @@ private:
     // A random engine
     std::random_device m_randomDevice;
 
+    // The object that will wrap rapcom
+    RapcomHostPtr m_rapcomHost;
+
     // 
     // Gem logic
     uint8_t m_activeGemIndex;
@@ -86,7 +96,4 @@ private:
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);
-
-    // Web server object
-    WebServerPtr m_webServer;
 };
