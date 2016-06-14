@@ -63,7 +63,7 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    const uint8_t gemCount = 6; // Exclude SoldColorGem
+    const uint8_t gemCount = 7;
     for (uint8_t i = 0; i < gemCount; i++)
     {
         // Create the Gem
@@ -77,20 +77,20 @@ void Prism::Prismify()
             gem = std::make_shared<RandomColorGem>();
             break;
         case 4:
-            gem = std::make_shared<ColorPeaks>();
-            break;
-        case 3:
             gem = std::make_shared<SwipeColorGem>();
             break;
+        case 3:
+            gem = std::make_shared<ExpandingDropsGem>();
+            break;
         case 2:
-            gem = std::make_shared<RunningPixel>();
+            gem = std::make_shared<RowRunnerGem>();
             break;
         case 1:
-            gem = std::make_shared<ExpandingDropsGem>();
+            gem = std::make_shared<RunningPixel>();
             break;
         case 0:
         default:
-            gem = std::make_shared<RowRunnerGem>();
+            gem = std::make_shared<ColorPeaks>();
             break;
         }
 
@@ -113,13 +113,23 @@ void Prism::Prismify()
         IFaderPtr fader = std::make_shared<Fader>();
         fader->SetFinishedCallback(GetSharedPtr<ITimelineObjectCallback>());
         gemLayer->SetFader(fader);
-     }
+    }
+
+    // Set our initial intensity
+    IntensityChanged(GetDoubleOrDefault(m_rapcomHost->GetConfig(), "Intensity", 0.85));
+
+    // Get the running times
+    m_maxActiveGemTimeSeconds = GetIntOrDefault(m_rapcomHost->GetConfig(), "MaxGemRunningTimeSeconds", GEM_RUNNING_TIME_MAX_SECONDS);
+    m_minActiveGemTimeSeconds = GetIntOrDefault(m_rapcomHost->GetConfig(), "MinGemRunningTimeSeconds", GEM_RUNNING_TIME_MIN_SECONDS);
+
+    // Update our enabled list
+    UpdateEnabledGemList();
+
+    // Save the config
+    m_rapcomHost->SaveConfig();
 
     // Run at 60fps.
     m_driver->Start(milliseconds(16));
-
-    // Set our initial intensity
-    SetIntensity(GetDoubleOrDefault(m_rapcomHost->GetConfig(), "Intensity", 0.85));
 }
 
 void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)
@@ -135,7 +145,10 @@ void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)
     }
 
     // Send the tick to the active panel
-    m_gemList[m_activeGemIndex].first->OnTick(tick, elapsedTime);
+    if (m_activeGemIndex != -1)
+    {
+        m_gemList[m_activeGemIndex].first->OnTick(tick, elapsedTime);
+    }
 }
 
 // Fired when a device is added.
@@ -175,23 +188,54 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
     m_activeGemTimeRemaing -= elapsedTime;
 
     // Check if we need to switch and make sure we have more than one gem
-    if (m_activeGemTimeRemaing.count() <= 0)
+    if (m_activeGemTimeRemaing.count() <= 0 || m_forceGemSwitch)
     {
         // Update the time reaming
-        std::uniform_int_distribution<int> timeRemainDist(GEM_RUNNING_TIME_MIN_SECONDS * 1000, GEM_RUNNING_TIME_MAX_SECONDS * 1000);
+        std::uniform_int_distribution<int> timeRemainDist(m_minActiveGemTimeSeconds * 1000, m_maxActiveGemTimeSeconds * 1000);
         m_activeGemTimeRemaing = milliseconds(timeRemainDist(m_randomDevice));
 
-        // Find the next gem number, make sure it isn't the same as this gem
-        std::uniform_int_distribution<int> nextGemDist(0, m_gemList.size() - 1);
-        uint8_t newActiveGemIndex = 0;
-        do 
+        // Unset the update flag
+        m_forceGemSwitch = false;
+
+        // Ensure there is a gem we can switch to
+        int8_t onlyEnabledGem = -1;
+        bool isAtLeastTwoEnabled = false;
+        for (int i = 0; i < m_enabledGemList.size(); i++)
         {
-            newActiveGemIndex = nextGemDist(m_randomDevice);
-        } while (newActiveGemIndex == m_activeGemIndex && m_gemList.size() != 1);
+            if (m_enabledGemList[i])
+            {
+                if (onlyEnabledGem == -1)
+                {
+                    onlyEnabledGem = i;
+                    continue;
+                }
+                isAtLeastTwoEnabled = true;
+                break;
+            }
+        }
+
+        uint8_t newActiveGemIndex = -1;
+
+        // Figure out what to switch to.
+        // If we have at least two pick on randomly.
+        if (isAtLeastTwoEnabled)
+        {
+            // Find the next gem number, make sure it isn't the same as this gem
+            std::uniform_int_distribution<int> nextGemDist(0, m_gemList.size() - 1);
+            do
+            {
+                newActiveGemIndex = nextGemDist(m_randomDevice);
+            } while (newActiveGemIndex == m_activeGemIndex && !m_enabledGemList[newActiveGemIndex]);
+        }
+        // If we only have one, set it active
+        else if (onlyEnabledGem != -1)
+        {
+            newActiveGemIndex = onlyEnabledGem;
+        }    
 
         // Now switch the gems
         // Tell the current gem it is going away.
-        if (m_activeGemIndex < m_gemList.size())
+        if (m_activeGemIndex != -1)
         {
             m_gemList[m_activeGemIndex].first->OnDeactivated();
 
@@ -208,19 +252,22 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
         // Update the active number
         m_activeGemIndex = newActiveGemIndex;
 
-        // Activate it
-        m_gemList[m_activeGemIndex].first->OnActivated();
+        if (m_activeGemIndex != -1)
+        {
+            // Activate it
+            m_gemList[m_activeGemIndex].first->OnActivated();
 
-        // Fade in the panel        
-        IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
-        fader->SetFrom(m_gemList[m_activeGemIndex].second->GetIntensity());
-        fader->SetTo(1.0);
-        fader->SetDuration(milliseconds(3000));
+            // Fade in the panel        
+            IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
+            fader->SetFrom(m_gemList[m_activeGemIndex].second->GetIntensity());
+            fader->SetTo(1.0);
+            fader->SetDuration(milliseconds(3000));
+        }
     }
 }
 
 // Sets the intensity of the main panel.
-void Prism::SetIntensity(double intensity)
+void Prism::IntensityChanged(double intensity)
 {
     // Create a fader if we don't have one.
     if (!m_lightPanel->GetFader())
@@ -235,11 +282,37 @@ void Prism::SetIntensity(double intensity)
     fader->SetFrom(m_lightPanel->GetIntensity());
     fader->SetTo(intensity);
     fader->SetDuration(milliseconds(2000));
+
+    std::cout << "Setting intensity to " << intensity << std::endl;
 }
 
-double Prism::GetIntensity()
+void Prism::EnabledGemsChanged()
 {
-    return m_lightPanel->GetIntensity();
+    // Update our gem list
+    UpdateEnabledGemList();
+
+    // Make sure our active gem isn't disabled
+    if (m_activeGemIndex == -1 || !m_enabledGemList[m_activeGemIndex])
+    {
+        // If so force a update
+        m_forceGemSwitch = true;
+    }
+
+    std::cout << "Enabled Gems Changed" << std::endl;
+}
+
+// Running time changed
+void Prism::GemRunningTimeChanged()
+{
+    m_maxActiveGemTimeSeconds = GetIntOrDefault(m_rapcomHost->GetConfig(), "MaxGemRunningTimeSeconds", GEM_RUNNING_TIME_MAX_SECONDS);
+    m_minActiveGemTimeSeconds = GetIntOrDefault(m_rapcomHost->GetConfig(), "MinGemRunningTimeSeconds", GEM_RUNNING_TIME_MAX_SECONDS);
+    int64_t timeRemain = m_activeGemTimeRemaing.count() / 1000;
+    if (timeRemain > m_maxActiveGemTimeSeconds)
+    {
+        m_activeGemTimeRemaing = milliseconds(m_maxActiveGemTimeSeconds * 1000);
+    }
+
+    std::cout << "Gem run time changed" << std::endl;
 }
 
 // Fired when a panel fade is complete
@@ -251,4 +324,48 @@ void Prism::OnTimelineFinished(ITimelineObjectPtr timeline)
         // If this was a fade out clear our animate out gem ptr
         m_animateOutGem = nullptr;
     }
+}
+
+void Prism::UpdateEnabledGemList()
+{
+    // Get the config
+    rapidjson::Document& config = m_rapcomHost->GetConfig();
+
+    // Clear our local and size it correctly
+    m_enabledGemList.clear();
+    m_enabledGemList.resize(m_gemList.size());
+
+    // The array
+    rapidjson::Value jsonArray;
+
+    // Check if it already exists
+    auto arrayIter = config.FindMember("EnabledGems");
+    if (arrayIter != config.MemberEnd() && arrayIter->value.IsArray())
+    {
+        // Get the array
+        jsonArray = arrayIter->value.GetArray();
+    }
+    else
+    {
+        // Create a new array and add it to the document
+        rapidjson::Value newArray;
+        newArray.SetArray();
+        jsonArray = newArray;
+    }
+
+    // Make sure the array is the correct size
+    while (jsonArray.Size() < m_gemList.size())
+    {
+        jsonArray.PushBack(true, config.GetAllocator());
+    }
+
+    // Now read the array
+    for (int i = 0; i < m_enabledGemList.size(); i++)
+    {
+        m_enabledGemList[i] = jsonArray[i].GetBool();
+    }
+
+    // Set our new list
+    config.RemoveMember("EnabledGems");
+    config.AddMember("EnabledGems", jsonArray, config.GetAllocator());
 }

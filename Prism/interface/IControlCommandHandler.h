@@ -5,10 +5,14 @@
 DECLARE_SMARTPOINTER(IControlCommandHandler);
 class IControlCommandHandler
 {
-public:    
-    // Sets the intensity
-    virtual void SetIntensity(double intensity) = 0;
+public:   
 
-    // Gets the current intensity
-    virtual double GetIntensity() = 0;
+    // Fired when the intensity has changed.
+    virtual void IntensityChanged(double intensity) = 0;
+
+    // Fired when the enabled gems is changed.
+    virtual void EnabledGemsChanged() = 0;
+
+    // Running time changed
+    virtual void GemRunningTimeChanged() = 0;
 };

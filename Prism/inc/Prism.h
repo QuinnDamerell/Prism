@@ -32,9 +32,12 @@ class Prism :
 {
 public:
     Prism() :
-        m_activeGemIndex(999),
+        m_activeGemIndex(-1),
         m_activeGemTimeRemaing(0),
-        m_animateOutGem(nullptr)
+        m_animateOutGem(nullptr),
+        m_maxActiveGemTimeSeconds(60),
+        m_minActiveGemTimeSeconds(60),
+        m_forceGemSwitch(false)
     { }
 
     // Preforms setup.
@@ -62,10 +65,13 @@ public:
     // IControlCommandHandler
 
     // Sets the intensity on the main panel.
-    void SetIntensity(double intensity);
+    void IntensityChanged(double intensity);
 
-    // Gets the intensity on the main panel.
-    double GetIntensity();
+    // Fired when the enabled gems list is changed.
+    void EnabledGemsChanged();
+
+    // Running time changed
+    void GemRunningTimeChanged();
 
 private:
 
@@ -89,11 +95,32 @@ private:
 
     // 
     // Gem logic
-    uint8_t m_activeGemIndex;
+
+    // The active gem
+    int8_t m_activeGemIndex;
+
+    // The time remaining on this gem
     LightFx::milliseconds m_activeGemTimeRemaing;
+
+    // The list of possible gems
     std::vector<GemPanelPair> m_gemList;
+
+    // The list of enabled gems
+    std::vector<bool> m_enabledGemList;
+
+    // The gem that is being animated out.
     IGemPtr m_animateOutGem;
+
+    // Forces the system to switch gems
+    bool m_forceGemSwitch;
+
+    // The min an max times a gem can be active.
+    uint64_t m_maxActiveGemTimeSeconds;
+    uint64_t m_minActiveGemTimeSeconds;
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);
+
+    // Updates the enabled gem list.
+    void UpdateEnabledGemList();
 };

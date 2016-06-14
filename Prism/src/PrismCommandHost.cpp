@@ -24,14 +24,12 @@ void PrismCommandHost::Run(bool blockOnInput)
 
     if (blockOnInput)
     {
-        PrintMessage("Enter An Intensity: ");
-
         // Now we will block forever waiting for command line input.
         for (std::string line; std::getline(std::cin, line);)
         {
             // try to get an intensity.
             double intensity = ::atof(line.c_str());
-            mysticalStone->SetIntensity(intensity);
+            mysticalStone->IntensityChanged(intensity);
             std::cout << "Setting intensity to " << intensity << std::endl;
         }
     }

@@ -238,3 +238,5 @@ _Pvt_Extensions
 *.d
 *.o
 *.out
+
+*.json
