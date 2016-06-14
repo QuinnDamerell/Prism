@@ -4,12 +4,6 @@
 [submodule "LightFX"]
 	path = LightFX
 	url = https://github.com/QuinnDamerell/LightFX.git
-[submodule "rapidjson"]
-	path = rapidjson
-	url = https://github.com/miloyip/rapidjson.git
-[submodule "mongoose"]
-	path = mongoose
-	url = https://github.com/cesanta/mongoose.git
 [submodule "Rapcom"]
 	path = Rapcom
 	url = https://github.com/QuinnDamerell/Rapcom.git

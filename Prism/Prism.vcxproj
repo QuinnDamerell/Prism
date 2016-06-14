@@ -58,9 +58,6 @@
     <ProjectReference Include="..\LightFX\LightFX\LightFX.vcxproj">
       <Project>{8c2942d4-ed1d-4064-b590-eea6e8463710}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\MongooseVs\Mongoose.vcxproj">
-      <Project>{67ff3961-cf5e-4ccd-9297-55a918018e94}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Rapcom\Rapcom.vcxproj">
       <Project>{b002884e-341f-43ff-a970-04d5093c960b}</Project>
     </ProjectReference>
@@ -116,7 +113,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\mongoose;$(SolutionDir)\rapidjson\include;$(SolutionDir)\Rapcom\inc;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\Rapcom\mongoose;$(SolutionDir)\Rapcom\rapidjson\include;$(SolutionDir)\Rapcom\inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
