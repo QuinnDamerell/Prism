@@ -8,6 +8,7 @@ CPP_FILES += \
 	Prism/src/Prism.cpp \
 	Prism/src/PrismCommandHost.cpp \
 	Prism/src/UsbDeviceManager.cpp \
+	Prism/src/RapcomHost.cpp \
 	Prism/src/Gems/ColorPeaks.cpp \
 	Prism/src/Gems/RandomColorGem.cpp \
 	Prism/src/Gems/SolidColorGem.cpp \
@@ -55,6 +56,26 @@ INCLUDES += -ILightFX/LightFX/interfaces/Fadables
 
 CLEAN_FILES += LightFX/LightFX/src/*.d LightFX/LightFX/src/*.o LightFX/LightFX/src/Drawables/*.d LightFX/LightFX/src/Drawables/*.o
 CLEAN_FILES += LightFX/LightFX/src/Fadables/*.d LightFX/LightFX/src/Fadables/*.o LightFX/LightFX/src/Colorables/*.d LightFX/LightFX/src/Colorables/*.o
+CPPFLAGS += -Wno-strict-aliasing -fexceptions
+
+###########################################################################
+# Rapcom
+
+TARGET := Rapcom
+
+CPP_FILES += \
+	Rapcom/src/LocalServer.cpp \
+	Rapcom/src/PollServer.cpp \
+	Rapcom/src/RapcomBase.cpp \
+	Rapcom/src/ThreadedObject.cpp \
+	Rapcom/mongoose/mongoose.cpp
+
+INCLUDES += -IRapcom/inc
+INCLUDES += -IRapcom/inc/internal
+INCLUDES += -IRapcom/rapidjson/include
+INCLUDES += -IRapcom/mongoose
+
+CLEAN_FILES += Rapcom/src/*.d Rapcom/src/*.o Rapcom/mongoose/*.d Rapcom/mongoose/*.o
 CPPFLAGS += -Wno-strict-aliasing -fexceptions
 
 ###########################################################################
