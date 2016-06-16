@@ -1,6 +1,8 @@
 #include <iostream>
 #include <exception>
 #include <memory>
+#include <chrono>
+#include <ctime>
 
 #include "Prism.h"
 #include "libusb.h"
@@ -137,6 +139,9 @@ void Prism::OnTick(uint64_t tick, milliseconds elapsedTime)
     // Check if we need to switch gems
     CheckForGemSwtich(elapsedTime);
 
+    // Check for an active hours change
+    CheckForActiveHoursChange();
+
     // If we have a panel we are fading out keep animating them until
     // they are faded out
     if (auto local = m_animateOutGem)
@@ -266,6 +271,72 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
     }
 }
 
+// Checks if active hours should be changed.
+void Prism::CheckForActiveHoursChange()
+{
+    // This can be quite a bit of work, so only do it once 30 seconds or so.
+    m_activeHoursTimeCheck++;
+    if (m_activeHoursTimeCheck < 1800)
+    {
+        return;
+    }
+    m_activeHoursTimeCheck = 0;
+
+    // Get the current time.
+    std::time_t timeNow = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::tm* localTime = std::localtime(&timeNow);
+
+    // Check if we hit one of the boundaries of active hours
+    uint8_t offHour = GetIntOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursOffHour", 1);
+    uint8_t offMin = GetIntOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursOffMin", 0);
+    std::string offTimeOfDay;
+    GetStringOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursOffTimeOfDay", "am", offTimeOfDay);
+    uint8_t onHour = GetIntOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursOnHour", 1);
+    uint8_t onMin = GetIntOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursOnMin", 0);
+    std::string onTimeOfDay;
+    GetStringOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursOnTimeOfDay", "am", onTimeOfDay);
+
+    // Account for 24 hour time.
+    if (offTimeOfDay == "pm")
+    {
+        offHour += 12;
+    }
+    // Account for 24 hour time.
+    if (onTimeOfDay == "pm")
+    {
+        onHour += 12;
+    }
+
+    // If are the times are the same we are disabled.
+    if (offHour == onHour && offMin == onMin)
+    {
+        return;
+    }
+
+    // Note we only change the intensity on the time boundaries. This is so it can be overwritten by the
+    // user.
+
+    // Check if we should so something.
+    if (localTime->tm_hour == offHour && localTime->tm_min == offMin && m_lightPanel->GetIntensity() != 0)
+    {
+        // Capture the value we turned off at.
+        m_rapcomHost->GetConfig().AddMember("ActiveHoursLastIntensity", m_lightPanel->GetIntensity(), m_rapcomHost->GetConfig().GetAllocator());
+
+        // We need to turn off.
+        IntensityChanged(0);
+    }
+
+    // Check if we should so something.
+    if (localTime->tm_hour == onHour && localTime->tm_min == onMin && m_lightPanel->GetIntensity() == 0)
+    {
+        // Get the value we turned off at
+        double lastOffValue = GetDoubleOrDefault(m_rapcomHost->GetConfig(), "ActiveHoursLastIntensity", 0.85);
+
+        // We need to turn off.
+        IntensityChanged(lastOffValue);
+    }
+}
+
 // Sets the intensity of the main panel.
 void Prism::IntensityChanged(double intensity)
 {
@@ -284,6 +355,9 @@ void Prism::IntensityChanged(double intensity)
     fader->SetDuration(milliseconds(2000));
 
     std::cout << "Setting intensity to " << intensity << std::endl;
+
+    // Make sure the config is updated
+    m_rapcomHost->GetConfig().AddMember("Intensity", intensity, m_rapcomHost->GetConfig().GetAllocator());
 }
 
 void Prism::EnabledGemsChanged()
@@ -313,6 +387,12 @@ void Prism::GemRunningTimeChanged()
     }
 
     std::cout << "Gem run time changed" << std::endl;
+}
+
+// Active hours updated
+void Prism::ActiveHoursUpdate()
+{
+    // Don't do anything for now.
 }
 
 // Fired when a panel fade is complete

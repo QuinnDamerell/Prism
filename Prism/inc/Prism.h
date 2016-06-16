@@ -37,7 +37,8 @@ public:
         m_animateOutGem(nullptr),
         m_maxActiveGemTimeSeconds(60),
         m_minActiveGemTimeSeconds(60),
-        m_forceGemSwitch(false)
+        m_forceGemSwitch(false),
+        m_activeHoursTimeCheck(0)
     { }
 
     // Preforms setup.
@@ -73,6 +74,9 @@ public:
     // Running time changed
     void GemRunningTimeChanged();
 
+    // Active hours updated
+    void ActiveHoursUpdate();
+
 private:
 
     // The device manager
@@ -92,6 +96,9 @@ private:
 
     // The object that will wrap rapcom
     RapcomHostPtr m_rapcomHost;
+
+    // A counter used to only check active hours every now and then.
+    uint64_t m_activeHoursTimeCheck;
 
     // 
     // Gem logic
@@ -120,6 +127,9 @@ private:
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);
+
+    // Checks if something should change due to active hours
+    void CheckForActiveHoursChange();
 
     // Updates the enabled gem list.
     void UpdateEnabledGemList();

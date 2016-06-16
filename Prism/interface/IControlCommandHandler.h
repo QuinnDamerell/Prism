@@ -15,4 +15,7 @@ public:
 
     // Running time changed
     virtual void GemRunningTimeChanged() = 0;
+
+    // Active hours updated
+    virtual void ActiveHoursUpdate() = 0;
 };

@@ -113,8 +113,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\Rapcom\mongoose;$(SolutionDir)\Rapcom\rapidjson\include;$(SolutionDir)\Rapcom\inc;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\interface;$(MSBuildProjectDirectory)\inc;$(SolutionDir)\libusb\libusb\;$(SolutionDir)\LightFx\LightFx\public\;$(SolutionDir)\LightFx\LightFx\inc;$(SolutionDir)\LightFx\LightFx\interfaces;$(SolutionDir)\Rapcom\mongoose;$(SolutionDir)\Rapcom\rapidjson\include;$(SolutionDir)\Rapcom\inc;$(IncludePath)</IncludePath>    
   </PropertyGroup>
+    <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -126,7 +131,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>true</SDLCheck>      
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

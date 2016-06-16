@@ -45,6 +45,20 @@ void RapcomHost::OnConfigChange(rapidjson::Document& oldConfig, rapidjson::Docum
             handler->GemRunningTimeChanged();
         }
     }
+
+    // Check for active hours updates
+    if (CheckConfigChange(oldConfig, newConfig, "ActiveHoursOffHour") == ConfigChangeType::Updated ||
+        CheckConfigChange(oldConfig, newConfig, "ActiveHoursOffMin") == ConfigChangeType::Updated ||
+        CheckConfigChange(oldConfig, newConfig, "ActiveHoursOffTimeOfDay") == ConfigChangeType::Updated || 
+        CheckConfigChange(oldConfig, newConfig, "ActiveHoursOnHour") == ConfigChangeType::Updated || 
+        CheckConfigChange(oldConfig, newConfig, "ActiveHoursOnMin") == ConfigChangeType::Updated || 
+        CheckConfigChange(oldConfig, newConfig, "ActiveHoursOnTimeOfDay") == ConfigChangeType::Updated)
+    {
+        if (auto handler = m_commandHandler.lock())
+        {
+            handler->GemRunningTimeChanged();
+        }
+    }
 }
 
 // Fired when a command has been issued
