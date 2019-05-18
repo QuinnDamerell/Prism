@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libusb-1.0 (static)", "libusb\msvc\libusb_static_2015.vcxproj", "{349EE8F9-7D25-4909-AAF5-FF3FADE72187}"
 EndProject
@@ -12,10 +12,13 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prism", "Prism\Prism.vcxproj", "{81B17183-AC47-418D-AA37-EE395B4C5BE0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rapcom", "Rapcom\Rapcom.vcxproj", "{B002884E-341F-43FF-A970-04D5093C960B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mongoose", "Rapcom\mongoose\Mongoose.vcxproj", "{67FF3961-CF5E-4CCD-9297-55A918018E94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3} = {6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rapcom Projects", "Rapcom Projects", "{EDC7160F-0516-4CE8-BE63-9BC65E94B596}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mongoose", "Rapcom\mongoose\Mongoose.vcxproj", "{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,20 +68,23 @@ Global
 		{B002884E-341F-43FF-A970-04D5093C960B}.Release|x64.Build.0 = Release|x64
 		{B002884E-341F-43FF-A970-04D5093C960B}.Release|x86.ActiveCfg = Release|Win32
 		{B002884E-341F-43FF-A970-04D5093C960B}.Release|x86.Build.0 = Release|Win32
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Debug|x64.ActiveCfg = Debug|x64
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Debug|x64.Build.0 = Debug|x64
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Debug|x86.ActiveCfg = Debug|Win32
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Debug|x86.Build.0 = Debug|Win32
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Release|x64.ActiveCfg = Release|x64
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Release|x64.Build.0 = Release|x64
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Release|x86.ActiveCfg = Release|Win32
-		{67FF3961-CF5E-4CCD-9297-55A918018E94}.Release|x86.Build.0 = Release|Win32
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Debug|x64.ActiveCfg = Debug|x64
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Debug|x64.Build.0 = Debug|x64
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Debug|x86.ActiveCfg = Debug|Win32
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Debug|x86.Build.0 = Debug|Win32
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x64.ActiveCfg = Release|x64
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x64.Build.0 = Release|x64
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x86.ActiveCfg = Release|Win32
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B002884E-341F-43FF-A970-04D5093C960B} = {EDC7160F-0516-4CE8-BE63-9BC65E94B596}
-		{67FF3961-CF5E-4CCD-9297-55A918018E94} = {EDC7160F-0516-4CE8-BE63-9BC65E94B596}
+		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3} = {EDC7160F-0516-4CE8-BE63-9BC65E94B596}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1C36BAF2-CBC8-4656-804A-21C8BD07A96F}
 	EndGlobalSection
 EndGlobal

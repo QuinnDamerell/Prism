@@ -42,8 +42,6 @@ void PrismCommandHost::Run(bool blockOnInput)
         }
     }
 
-
-
     // This should never return.
     return;
 }

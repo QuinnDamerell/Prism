@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ratio>
+#include <functional>
 
 #include "libusb.h"
 #include "UsbDeviceManager.h"
