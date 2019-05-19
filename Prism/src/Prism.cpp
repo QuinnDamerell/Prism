@@ -12,6 +12,7 @@
 #include "Drawables/Drawable.h"
 #include "Fadables/Fader.h"
 
+#include "Gems/ColorCollider.h"
 #include "Gems/SolidColorGem.h"
 #include "Gems/RandomColorGem.h"
 #include "Gems/ColorPeaks.h"
@@ -65,35 +66,38 @@ void Prism::Prismify()
         throw std::runtime_error("Setup hasn't been called!");
     }
 
-    const uint8_t gemCount = 7;
+    const uint8_t gemCount = 8;
     for (uint8_t i = 0; i < gemCount; i++)
     {
         // Create the Gem
         IGemPtr gem;
         switch (i)
         {
-        case 6:
-            gem = std::make_shared<SolidColorGem>();
-            break;
-        case 5:
-            gem = std::make_shared<RandomColorGem>();
-            break;
-        case 4:
-            gem = std::make_shared<SwipeColorGem>();
-            break;
-        case 3:
-            gem = std::make_shared<ExpandingDropsGem>();
-            break;
-        case 2:
-            gem = std::make_shared<RowRunnerGem>();
-            break;
-        case 1:
-            gem = std::make_shared<RunningPixel>();
-            break;
-        case 0:
-        default:
-            gem = std::make_shared<ColorPeaks>();
-            break;
+         case 7:
+            gem = std::make_shared<ColorCollider>();
+             break;
+         case 6:
+             gem = std::make_shared<SolidColorGem>();
+             break;
+         case 5:
+             gem = std::make_shared<RandomColorGem>();
+             break;
+         case 4:
+             gem = std::make_shared<SwipeColorGem>();
+             break;
+         case 3:
+             gem = std::make_shared<ExpandingDropsGem>();
+             break;
+         case 2:
+             gem = std::make_shared<RowRunnerGem>();
+             break;
+         case 1:
+             gem = std::make_shared<RunningPixel>();
+             break;
+         case 0:
+         default:
+             gem = std::make_shared<ColorPeaks>();
+             break;
         }
 
         // Make a new panel for the Gem
@@ -230,7 +234,7 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
             do
             {
                 newActiveGemIndex = nextGemDist(m_randomDevice);
-            } while (newActiveGemIndex == m_activeGemIndex && !m_enabledGemList[newActiveGemIndex]);
+            } while (newActiveGemIndex == m_activeGemIndex || !m_enabledGemList[newActiveGemIndex]);
         }
         // If we only have one, set it active
         else if (onlyEnabledGem != -1)
@@ -238,36 +242,41 @@ void Prism::CheckForGemSwtich(milliseconds elapsedTime)
             newActiveGemIndex = onlyEnabledGem;
         }    
 
-        // Now switch the gems
-        // Tell the current gem it is going away.
-        if (m_activeGemIndex != -1)
-        {
-            m_gemList[m_activeGemIndex].first->OnDeactivated();
+		// Only if the new gem isn't active, switch them. 
+		// This will happen when there is only one gem active.
+		if (m_activeGemIndex != newActiveGemIndex)
+		{
+			// Now switch the gems
+			// Tell the current gem it is going away.
+			if (m_activeGemIndex != -1)
+			{
+				m_gemList[m_activeGemIndex].first->OnDeactivated();
 
-            // Fade the panel out
-            IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
-            fader->SetFrom(1.0);
-            fader->SetTo(0);
-            fader->SetDuration(milliseconds(3000));
+				// Fade the panel out
+				IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
+				fader->SetFrom(1.0);
+				fader->SetTo(0);
+				fader->SetDuration(milliseconds(3000));
 
-            // Set the panel as our animate fade out so the panel keeps animating as it fades away
-            m_animateOutGem = m_gemList[m_activeGemIndex].first;
-        }
+				// Set the panel as our animate fade out so the panel keeps animating as it fades away
+				m_animateOutGem = m_gemList[m_activeGemIndex].first;
+			}
 
-        // Update the active number
-        m_activeGemIndex = newActiveGemIndex;
+			// Update the active number
+			m_activeGemIndex = newActiveGemIndex;
 
-        if (m_activeGemIndex != -1)
-        {
-            // Activate it
-            m_gemList[m_activeGemIndex].first->OnActivated();
+			if (m_activeGemIndex != -1)
+			{
+				// Activate it
+				m_gemList[m_activeGemIndex].first->OnActivated();
 
-            // Fade in the panel        
-            IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
-            fader->SetFrom(m_gemList[m_activeGemIndex].second->GetIntensity());
-            fader->SetTo(1.0);
-            fader->SetDuration(milliseconds(3000));
-        }
+				// Fade in the panel        
+				IFaderPtr fader = m_gemList[m_activeGemIndex].second->GetFader();
+				fader->SetFrom(m_gemList[m_activeGemIndex].second->GetIntensity());
+				fader->SetTo(1.0);
+				fader->SetDuration(milliseconds(3000));
+			}
+		}
     }
 }
 
@@ -392,7 +401,8 @@ void Prism::GemRunningTimeChanged()
 // Active hours updated
 void Prism::ActiveHoursUpdate()
 {
-    // Don't do anything for now.
+    // Set the check value high so we check again quickly
+	m_activeHoursTimeCheck = 13370000;
 }
 
 // Fired when a panel fade is complete

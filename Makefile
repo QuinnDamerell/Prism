@@ -9,6 +9,7 @@ CPP_FILES += \
 	Prism/src/PrismCommandHost.cpp \
 	Prism/src/UsbDeviceManager.cpp \
 	Prism/src/RapcomHost.cpp \
+	Prism/src/Gems/ColorCollider.cpp \
 	Prism/src/Gems/ColorPeaks.cpp \
 	Prism/src/Gems/RandomColorGem.cpp \
 	Prism/src/Gems/SolidColorGem.cpp \
@@ -41,6 +42,7 @@ CPP_FILES += \
 	LightFX/LightFX/src/Drawables/SwipeDrawable.cpp \
 	LightFX/LightFX/src/Drawables/ExpandingDrawable.cpp \
 	LightFX/LightFX/src/Fadables/Fader.cpp \
+	LightFX/LightFX/src/Fadables/Strober.cpp \
 	LightFX/LightFX/src/Colorables/Colorer.cpp \
 	LightFX/LightFX/src/Colorables/RainbowColorer.cpp \
 	LightFX/LightFX/src/Colorables/CrossfadeColorer.cpp
@@ -125,16 +127,6 @@ ifeq ($(UNAME), Darwin)
 else
 	# Everyone except ancient versions of gcc on Mac OS likes this flag...
 	CXXFLAGS += -std=gnu++0x
-endif
-
-ifneq ("$(MINGW)", "")
-	# Windows
-	TARGET := $(TARGET).exe
-	CPPFLAGS += -D_WIN32_WINNT=0x0501
-
-	# Static build makes it portable but big, UPX packer decreases size a lot.
-	LDFLAGS += -static
-	PACK_CMD := upx\upx391w.exe $(TARGET)
 endif
 
 ifneq ("$(DEBUG)", "")

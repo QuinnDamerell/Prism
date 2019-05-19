@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="inc\RapcomHost.h" />
     <ClInclude Include="inc\Common.h" />
+    <ClInclude Include="inc\Gems\ColorCollider.h" />
     <ClInclude Include="inc\Gems\ColorPeaks.h" />
     <ClInclude Include="inc\Gems\ExpandingDropsGem.h" />
     <ClInclude Include="inc\Gems\RandomColorGem.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="interface\IWriteablePixelEndpoint.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Gems\ColorCollider.cpp" />
     <ClCompile Include="src\Gems\ColorPeaks.cpp" />
     <ClCompile Include="src\Gems\ExpandingDropsGem.cpp" />
     <ClCompile Include="src\Gems\RandomColorGem.cpp" />

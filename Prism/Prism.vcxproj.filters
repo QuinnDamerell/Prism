@@ -39,6 +39,9 @@
     <ClInclude Include="interface\IGem.h">
       <Filter>interface</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Gems\ColorCollider.h">
+      <Filter>inc\Gems</Filter>
+    </ClInclude>
     <ClInclude Include="inc\Gems\ColorPeaks.h">
       <Filter>inc\Gems</Filter>
     </ClInclude>
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="src\Prism.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+   <ClCompile Include="src\Gems\ColorCollider.cpp">
+      <Filter>src\Gems</Filter>
     </ClCompile>
     <ClCompile Include="src\Gems\ColorPeaks.cpp">
       <Filter>src\Gems</Filter>

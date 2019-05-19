@@ -92,7 +92,11 @@ void RunningPixel::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
             || (newDirection == RunningPixel::Direction::Down && m_currentDirection == RunningPixel::Direction::Up)
             || (newDirection == RunningPixel::Direction::Up && m_currentDirection == RunningPixel::Direction::Down)
             || (newDirection == RunningPixel::Direction::Left && m_currentDirection == RunningPixel::Direction::Right)
-            || (newDirection == RunningPixel::Direction::Right && m_currentDirection == RunningPixel::Direction::Left));
+            || (newDirection == RunningPixel::Direction::Right && m_currentDirection == RunningPixel::Direction::Left)
+			|| (newDirection == RunningPixel::Direction::Up && m_currentY == 0)
+			|| (newDirection == RunningPixel::Direction::Left && m_currentX == 0)
+			|| (newDirection == RunningPixel::Direction::Down && m_currentY == m_mainLayer->GetHeight() - 1)
+			|| (newDirection == RunningPixel::Direction::Right && m_currentX == m_mainLayer->GetWitdh() - 1));
 
         // Set the direction
         m_currentDirection = newDirection;
@@ -102,12 +106,12 @@ void RunningPixel::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
     // Now update the move redirect if we need to.
     if (m_moveRedirect < 0)
     {
-        std::uniform_int_distribution<int> dist(3, 6);
+        std::uniform_int_distribution<int> dist(2, 6);
         m_moveRedirect = dist(m_randomDevice);
     }
 
     // Update the color
-    m_currentColorValue += .008;
+    m_currentColorValue += .004;
     if (m_currentColorValue > 1)
     {
         m_currentColorValue = 0;

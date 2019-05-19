@@ -56,7 +56,7 @@ void RapcomHost::OnConfigChange(rapidjson::Document& oldConfig, rapidjson::Docum
     {
         if (auto handler = m_commandHandler.lock())
         {
-            handler->GemRunningTimeChanged();
+            handler->ActiveHoursUpdate();
         }
     }
 }
