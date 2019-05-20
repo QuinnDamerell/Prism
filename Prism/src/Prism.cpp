@@ -100,6 +100,9 @@ void Prism::Prismify()
              break;
         }
 
+		// Add the realtime controller interface
+		gem->SetRealtimeController(GetSharedPtr<IRealtimeController>());
+
         // Make a new panel for the Gem
         IDrawablePtr gemLayer = std::make_shared<Drawable>();
 
@@ -404,6 +407,40 @@ void Prism::ActiveHoursUpdate()
     // Set the check value high so we check again quickly
 	m_activeHoursTimeCheck = 13370000;
 }
+
+void Prism::IncomingRealTimeControl(float value1, float value2, float value3, float value4)
+{
+	if (value1 >= 0 && value1 <= 1)
+	{
+		m_values[0] = value1;
+		m_valuesSetTimes[0] = std::chrono::high_resolution_clock::now();
+	}
+	if (value2 >= 0 && value2 <= 1)
+	{
+		m_values[1] = value2;
+		m_valuesSetTimes[1] = std::chrono::high_resolution_clock::now();
+	}
+}
+
+// Returns -1 if the flaot hasn't been supplied in the last 30 seconds.
+float Prism::GetRealtimeValue(int valueNumber)
+{
+	if (valueNumber < 1 || valueNumber > m_valuesSetTimes.size())
+	{
+		return -1;
+	}
+
+	time_point tp = m_valuesSetTimes[valueNumber-1];
+	float value = m_values[valueNumber - 1];
+
+	// If the last set time is too old, return -1;
+	if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - tp).count() > 30)
+	{
+		return -1;
+	}
+	return value;
+}
+
 
 // Fired when a panel fade is complete
 void Prism::OnTimelineFinished(ITimelineObjectPtr timeline)

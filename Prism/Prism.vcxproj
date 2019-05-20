@@ -36,6 +36,7 @@
     <ClInclude Include="interface\IControlCommandHandler.h" />
     <ClInclude Include="interface\IDeviceDiscoveryListener.h" />
     <ClInclude Include="interface\IGem.h" />
+    <ClInclude Include="interface\IRealtimeController.h" />
     <ClInclude Include="interface\IWriteablePixelEndpoint.h" />
   </ItemGroup>
   <ItemGroup>

@@ -64,5 +64,62 @@ void RapcomHost::OnConfigChange(rapidjson::Document& oldConfig, rapidjson::Docum
 // Fired when a command has been issued
 void RapcomHost::OnCommand(rapidjson::Document& request, rapidjson::Document& response)
 {
+	// Look for the command name
+	auto commandValue = request.FindMember("Command");
+	if (commandValue == request.MemberEnd())
+	{
+		return;
+	}
+	if (!commandValue->value.IsString())
+	{
+		return;
+	}
+	std::string command(commandValue->value.GetString());
 
+	// Look for a realtime control
+	if (command.compare("RealTimeControl") == 0)
+	{
+		// There should be values sent.
+		float value1 = -1;
+		float value2 = -1;
+		float value3 = -1;
+		float value4 = -1;
+		auto value = request.FindMember("Value1");
+		if (value != request.MemberEnd())
+		{
+			auto type = value->value.GetType();
+			if (value->value.IsFloat())
+			{
+				value1 = value->value.GetFloat();
+			}
+		}
+		value = request.FindMember("Value2");
+		if (value != request.MemberEnd())
+		{
+			if (value->value.IsFloat())
+			{
+				value2 = value->value.GetFloat();
+			}
+		}
+		value = request.FindMember("Value3");
+		if (value != request.MemberEnd())
+		{
+			if (value->value.IsFloat())
+			{
+				value3 = value->value.GetFloat();
+			}
+		}
+		value = request.FindMember("Value4");
+		if (value != request.MemberEnd())
+		{
+			if (value->value.IsFloat())
+			{
+				value4 = value->value.GetFloat();
+			}
+		}
+		if (auto handler = m_commandHandler.lock())
+		{
+			handler->IncomingRealTimeControl(value1, value2, value3, value4);
+		}
+	}
 }

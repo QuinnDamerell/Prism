@@ -72,6 +72,9 @@
     <ClInclude Include="inc\RapcomHost.h">
       <Filter>inc</Filter>
     </ClInclude>
+    <ClInclude Include="interface\IRealtimeController.h">
+      <Filter>interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\UsbDeviceManager.cpp">
@@ -83,7 +86,7 @@
     <ClCompile Include="src\Prism.cpp">
       <Filter>src</Filter>
     </ClCompile>
-   <ClCompile Include="src\Gems\ColorCollider.cpp">
+    <ClCompile Include="src\Gems\ColorCollider.cpp">
       <Filter>src\Gems</Filter>
     </ClCompile>
     <ClCompile Include="src\Gems\ColorPeaks.cpp">

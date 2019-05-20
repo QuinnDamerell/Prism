@@ -18,4 +18,7 @@ public:
 
     // Active hours updated
     virtual void ActiveHoursUpdate() = 0;
+
+	// Fired when realtime contorls are updated.
+	virtual void IncomingRealTimeControl(float value1, float value2, float value3, float value4) = 0;
 };

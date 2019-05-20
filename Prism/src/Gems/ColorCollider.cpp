@@ -45,7 +45,7 @@ void ColorCollider::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 {
 	// Only update every 6 ticks, which will make the snakes move more slowly.
 	m_updateDelayCount++;
-	if (m_updateDelayCount < 6)
+	if (m_updateDelayCount < GetScaledRealtimeValue(1, 0, 12, 6))
 	{
 		return;
 	}
@@ -144,7 +144,7 @@ void ColorCollider::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 		// Draw the new element.
 		SolidDrawablePtr drawable = std::make_shared<SolidDrawable>(true);
 		drawable->SetPosition(pixel.m_currentX, pixel.m_currentY, 1, 1);
-		double color = m_currentColor + (count * 0.1);
+		double color = m_currentColor + (count * GetScaledRealtimeValue(2, 0.0, 0.5, 0.1));
 		color = color > 1.0 ? color - 1.0 : color;
 		drawable->SetColor(GetRainbowColor(color));
 

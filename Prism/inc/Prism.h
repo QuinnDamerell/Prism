@@ -1,6 +1,7 @@
 #pragma once
 
 #include <random>
+#include <array>
 
 #include "Common.h"
 
@@ -8,6 +9,7 @@
 #include "UsbDeviceManager.h"
 #include "IControlCommandHandler.h"
 #include "IDeviceDiscoveryListener.h"
+#include "IRealtimeController.h"
 #include "IWriteablePixelEndpoint.h"
 #include "SharedFromThisHelper.h"
 #include "Panel.h"
@@ -20,25 +22,27 @@
 #define GEM_RUNNING_TIME_MIN_SECONDS 40
 
 typedef std::pair<IGemPtr, LightFx::Drawables::IDrawablePtr> GemPanelPair;
+typedef std::chrono::time_point<std::chrono::high_resolution_clock> time_point;
 
 DECLARE_SMARTPOINTER(Prism);
 class Prism :
     public IDeviceDiscoverListener,
     public IControlCommandHandler,
+	public IRealtimeController,
     public LightFx::IPanelRenderedCallback,
     public LightFx::IDrivable,
     public LightFx::SharedFromThis,
     public LightFx::ITimelineObjectCallback
 {
 public:
-    Prism() :
-        m_activeGemIndex(-1),
-        m_activeGemTimeRemaing(0),
-        m_animateOutGem(nullptr),
-        m_maxActiveGemTimeSeconds(60),
-        m_minActiveGemTimeSeconds(60),
-        m_forceGemSwitch(false),
-        m_activeHoursTimeCheck(0)
+	Prism() :
+		m_activeGemIndex(-1),
+		m_activeGemTimeRemaing(0),
+		m_animateOutGem(nullptr),
+		m_maxActiveGemTimeSeconds(60),
+		m_minActiveGemTimeSeconds(60),
+		m_forceGemSwitch(false),
+		m_activeHoursTimeCheck(0)
     { }
 
     // Preforms setup.
@@ -76,6 +80,15 @@ public:
 
     // Active hours updated
     void ActiveHoursUpdate();
+
+	// Fires when the realtime control is updated.
+	void Prism::IncomingRealTimeControl(float value1, float value2, float value3, float value4);
+
+	//
+	// IRealtimeController
+
+	// Gets the user supplied realtime value if one exists.
+	float GetRealtimeValue(int valueNumber);
 
 private:
 
@@ -124,6 +137,10 @@ private:
     // The min an max times a gem can be active.
     uint64_t m_maxActiveGemTimeSeconds;
     uint64_t m_minActiveGemTimeSeconds;
+
+	// Realtime control values
+	std::array<float, 4> m_values;
+	std::array<time_point, 4> m_valuesSetTimes;
 
     // Checks if we should change gems
     void CheckForGemSwtich(LightFx::milliseconds elapsedTime);
