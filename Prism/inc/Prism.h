@@ -82,7 +82,7 @@ public:
     void ActiveHoursUpdate();
 
 	// Fires when the realtime control is updated.
-	void Prism::IncomingRealTimeControl(float value1, float value2, float value3, float value4);
+	void IncomingRealTimeControl(float value1, float value2, float value3, float value4);
 
 	//
 	// IRealtimeController
