@@ -46,12 +46,12 @@ protected:
 		return -1;
 	}
 
-	float GetScaledRealtimeValue(int valueNumber, float min, float max, float default)
+	float GetScaledRealtimeValue(int valueNumber, float min, float max, float def)
 	{
 		float scale = GetRealtimeValue(valueNumber);
 		if (scale == -1)
 		{
-			return default;
+			return def;
 		}
 
 		// Find the correct value.
