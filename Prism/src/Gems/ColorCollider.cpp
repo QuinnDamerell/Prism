@@ -45,7 +45,7 @@ void ColorCollider::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 {
 	// Only update every 6 ticks, which will make the snakes move more slowly.
 	m_updateDelayCount++;
-	if (m_updateDelayCount < GetScaledRealtimeValue(1, 0, 12, 6))
+	if (m_updateDelayCount < GetScaledRealtimeValue(1, 1, 12, 6))
 	{
 		return;
 	}
