@@ -9,7 +9,7 @@
 
 namespace Gems
 {
-	class ColorColliderPixel 
+	class ColorColliderSnake
 	{
 	public:
 		enum class  Direction
@@ -20,16 +20,14 @@ namespace Gems
 			Right
 		};
 
-		ColorColliderPixel(int16_t id) :
+		ColorColliderSnake(int16_t id) :
 			m_id(id),
-			m_currentX(0),
-			m_currentY(0),
 			m_currentDirection(Direction::Up)
 		{}	
 
+		std::list<LightFx::Drawables::SolidDrawablePtr> m_pixels;
+
 		int16_t m_id;
-		int64_t m_currentX;
-		int64_t m_currentY;
 		int64_t m_moveRedirect;
 		Direction m_currentDirection;
 	};
@@ -68,7 +66,7 @@ namespace Gems
 		int m_updateDelayCount;
 		double m_currentColor;
 
-        // The running pixels
-		std::list<ColorColliderPixel> m_pixels;    
+        // The running snakes
+		std::list<ColorColliderSnake> m_snakes;
     };
 }

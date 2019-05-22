@@ -19,16 +19,18 @@ void ColorCollider::OnSetup(LightFx::Drawables::IDrawablePtr mainLayer)
 	// Create the pixels.
 	for (int i = 0; i < 2; i++)
 	{
-		m_pixels.emplace_back(ColorColliderPixel(static_cast<int16_t>(i)));
+		m_snakes.emplace_back(ColorColliderSnake(static_cast<int16_t>(i)));
 	}
 
 	std::uniform_int_distribution<int> dist(0, static_cast<int>(mainLayer->GetHeight()) - 1);
-	for (ColorColliderPixel& pixel : m_pixels)
+	for (ColorColliderSnake& snake : m_snakes)
 	{
-		pixel.m_currentX = dist(m_randomDevice);
-		pixel.m_currentY = dist(m_randomDevice);
-		pixel.m_currentDirection = ColorColliderPixel::Direction::Down;
-		pixel.m_moveRedirect = -1;
+		// Create a drawable to start off with.
+		SolidDrawablePtr tmp = std::make_shared<SolidDrawable>();
+		tmp->SetPosition(dist(m_randomDevice), dist(m_randomDevice), 1, 1);
+		snake.m_pixels.emplace_back(tmp);
+		snake.m_currentDirection = ColorColliderSnake::Direction::Down;
+		snake.m_moveRedirect = -1;
 	}
 }
 
@@ -58,130 +60,221 @@ void ColorCollider::OnTick(uint64_t tick, std::chrono::milliseconds elapsedTime)
 		m_currentColor = 0;
 	}
 
+	int collisionX = -1;
+	int collisionY = -1;
+
 	int count = 0;
-	for (ColorColliderPixel& pixel : m_pixels)
+	for (ColorColliderSnake& snake : m_snakes)
 	{
 		count++;
 
-		// Update position
-		switch (pixel.m_currentDirection)
+		// Make a move
+		int newX = 0;
+		int newY = 0;
+
+		bool madeMove = false;
+		bool needsToChangeDirection = false;
+		bool triedUp = false;
+		bool triedDown = false;
+		bool triedLeft = false;
+		bool triedRight = false;
+
+		// Don't move in the oposite direct that we started.
+		switch(snake.m_currentDirection)
 		{
-		case ColorColliderPixel::Direction::Down:
-			pixel.m_currentY++;
-			break;
-		case ColorColliderPixel::Direction::Up:
-			pixel.m_currentY--;
-			break;
-		case ColorColliderPixel::Direction::Left:
-			pixel.m_currentX--;
-			break;
-		case ColorColliderPixel::Direction::Right:
-			pixel.m_currentX++;
-			break;
+			case ColorColliderSnake::Direction::Down:
+				triedUp = true;
+				break;
+			case ColorColliderSnake::Direction::Up:
+				triedDown = true;
+				break;
+			case ColorColliderSnake::Direction::Left:
+				triedRight = true;
+				break;
+			case ColorColliderSnake::Direction::Right:
+				triedLeft = true;
+				break;
 		}
 
-		// Bounds check
-		bool changeDirection = false;
-		if (pixel.m_currentX >= static_cast<int64_t>(m_mainLayer->GetWitdh()))
+		// Check if we just want to randomly change position
+		snake.m_moveRedirect--;
+		if (snake.m_moveRedirect < 0)
 		{
-			pixel.m_currentX = m_mainLayer->GetWitdh() - 1;
-			changeDirection = true;
-		}
-		if (pixel.m_currentX < 0)
-		{
-			pixel.m_currentX = 0;
-			changeDirection = true;
-		}
-		if (pixel.m_currentY >= static_cast<int64_t>(m_mainLayer->GetHeight()))
-		{
-			pixel.m_currentY = m_mainLayer->GetHeight() - 1;
-			changeDirection = true;
-		}
-		if (pixel.m_currentY < 0)
-		{
-			pixel.m_currentY = 0;
-			changeDirection = true;
+			needsToChangeDirection = true;
 		}
 
-		// Force a move if we haven't in sometime.
-		pixel.m_moveRedirect--;
-		if (pixel.m_moveRedirect < 0)
+		while (!madeMove)
 		{
-			changeDirection = true;
-		}
+			// Take the current position and try to keep moving as we want to.
+			newX = snake.m_pixels.front()->GetSolidDrawableX();
+			newY = snake.m_pixels.front()->GetSolidDrawableY();
 
-		// Change direction if needed
-		if (changeDirection)
-		{
-			// Get a new direction, make sure it isn't the opposite of the current or current.
-			ColorColliderPixel::Direction newDirection;
-			std::uniform_int_distribution<int> dist(0, 3);
-			do
+			// Update position
+			switch (snake.m_currentDirection)
 			{
-				newDirection = (ColorColliderPixel::Direction)dist(m_randomDevice);
-			} while (newDirection == pixel.m_currentDirection
-				|| (newDirection == ColorColliderPixel::Direction::Down && pixel.m_currentDirection == ColorColliderPixel::Direction::Up)
-				|| (newDirection == ColorColliderPixel::Direction::Up && pixel.m_currentDirection == ColorColliderPixel::Direction::Down)
-				|| (newDirection == ColorColliderPixel::Direction::Left && pixel.m_currentDirection == ColorColliderPixel::Direction::Right)
-				|| (newDirection == ColorColliderPixel::Direction::Right && pixel.m_currentDirection == ColorColliderPixel::Direction::Left)
-				|| (newDirection == ColorColliderPixel::Direction::Up && pixel.m_currentY == 0)
-				|| (newDirection == ColorColliderPixel::Direction::Left && pixel.m_currentX == 0)
-				|| (newDirection == ColorColliderPixel::Direction::Down && pixel.m_currentY == m_mainLayer->GetHeight() - 1)
-				|| (newDirection == ColorColliderPixel::Direction::Right && pixel.m_currentX == m_mainLayer->GetWitdh() - 1));
+			case ColorColliderSnake::Direction::Down:
+				newY++;
+				break;
+			case ColorColliderSnake::Direction::Up:
+				newY--;
+				break;
+			case ColorColliderSnake::Direction::Left:
+				newX--;
+				break;
+			case ColorColliderSnake::Direction::Right:
+				newX++;
+				break;
+			}
 
-			// Set the direction
-			pixel.m_currentDirection = newDirection;
-			pixel.m_moveRedirect = -1;
+			// Check if we are moving out of bounds
+			if (newX > static_cast<int64_t>(m_mainLayer->GetWitdh() - 1))
+			{
+				triedRight = true;
+				needsToChangeDirection = true;
+			}
+			if (newX < 0)
+			{
+				triedLeft = true;
+				needsToChangeDirection = true;
+			}
+			if (newY > static_cast<int64_t>(m_mainLayer->GetHeight() - 1))
+			{
+				triedDown = true;
+				needsToChangeDirection = true;
+			}
+			if (newY < 0)
+			{
+				triedUp = true;
+				needsToChangeDirection = true;
+			}
+
+			// Make sure we don't interect ourselves or anyother snake
+			if (!needsToChangeDirection)
+			{
+				for (ColorColliderSnake& itr : m_snakes)
+				{
+					int count = 0;
+					for (SolidDrawablePtr& ptr : itr.m_pixels)
+					{
+						if (newY == ptr->GetSolidDrawableY() && newX == ptr->GetSolidDrawableX())
+						{
+							// If the fronts hit make a collision.
+							if (count == 0 && itr.m_id != snake.m_id)
+							{
+								collisionX = newX;
+								collisionY = newY;
+							}							
+
+							// Invalidate the current position.
+							switch (snake.m_currentDirection)
+							{
+							case ColorColliderSnake::Direction::Down:
+								triedDown = true;
+								break;
+							case ColorColliderSnake::Direction::Up:
+								triedUp = true;
+								break;
+							case ColorColliderSnake::Direction::Left:
+								triedLeft = true;
+								break;
+							case ColorColliderSnake::Direction::Right:
+								triedRight = true;
+								break;
+							}
+							needsToChangeDirection = true;
+							break;
+						}
+						count++;
+					}
+					if (needsToChangeDirection)
+					{
+						break;
+					}
+				}
+			}
+
+			// Try to change the direction if needed, we are only allowed to pick valid directions.
+			if (needsToChangeDirection)
+			{
+				// If we don't have any where to go, give up.
+				if (triedUp && triedDown && triedLeft && triedRight)
+				{
+					newX = snake.m_pixels.front()->GetSolidDrawableX();
+					newY = snake.m_pixels.front()->GetSolidDrawableY();
+					madeMove = true;
+					break;
+				}
+
+				ColorColliderSnake::Direction newDirection;
+				std::uniform_int_distribution<int> dist(0, 3);
+				do
+				{
+					newDirection = (ColorColliderSnake::Direction)dist(m_randomDevice);
+				} while (newDirection == ColorColliderSnake::Direction::Down && triedDown
+					||   newDirection == ColorColliderSnake::Direction::Up && triedUp
+					||   newDirection == ColorColliderSnake::Direction::Left && triedLeft
+					||   newDirection == ColorColliderSnake::Direction::Right && triedRight);
+
+				// Set our new state and loop again to try a new direction.
+				snake.m_currentDirection = newDirection;
+				needsToChangeDirection = false;
+				continue;
+			}
+			else
+			{
+				madeMove = true;
+			}
 		}
 
 		// Now update the move redirect if we need to.
-		if (pixel.m_moveRedirect < 0)
+		if (snake.m_moveRedirect < 0)
 		{
 			std::uniform_int_distribution<int> dist(1, 6);
-			pixel.m_moveRedirect = dist(m_randomDevice);
+			snake.m_moveRedirect = dist(m_randomDevice);
 		}
 
 		// Draw the new element.
 		SolidDrawablePtr drawable = std::make_shared<SolidDrawable>(true);
-		drawable->SetPosition(pixel.m_currentX, pixel.m_currentY, 1, 1);
-		double color = m_currentColor + (count * GetScaledRealtimeValue(2, 0.0, 0.5, 0.1));
+		drawable->SetPosition(newX, newY, 1, 1);
+		double color = m_currentColor + (count * 0.1);
 		color = color > 1.0 ? color - 1.0 : color;
 		drawable->SetColor(GetRainbowColor(color));
 
-		// Make a fader
-		StroberPtr fader = std::make_shared<Strober>(milliseconds(500), milliseconds(500));
-		drawable->SetFader(fader);
-		
+		// Add the new pixel to our list.
+		snake.m_pixels.emplace_front(drawable);
+	
 		// Add the layer to the grid
 		m_mainLayer->AddDrawable(drawable, 100);
-	}
 
-	bool collisionFound = false;
-	for (ColorColliderPixel& px1 : m_pixels)
-	{
-		for (ColorColliderPixel& px2 : m_pixels)
+		// Clean up any extra pixels in the list
+		int count = 0;
+		while (snake.m_pixels.size() > GetScaledRealtimeValue(2, 1, 20, 5))
 		{
-			if (px1.m_id != px2.m_id && px1.m_currentX == px2.m_currentX && px1.m_currentY == px2.m_currentY)
+			// Only take a max of two off per cycle.
+			count++;
+			if (count > 2)
 			{
-				// Make the swipe
-				ExpandingDrawablePtr drop = std::make_shared<ExpandingDrawable>();
-
-				// Set the direction.
-				drop->SetStartingPoint(px1.m_currentX, px1.m_currentY);
-
-				// Set the color
-				drop->SetColor(GenerateRandomColor(1 - m_currentColor));
-
-				// Add the layer
-				m_mainLayer->AddDrawable(drop, 100);
-
-				collisionFound = true;
 				break;
 			}
+			DrawablePtr ptr = snake.m_pixels.back();
+			snake.m_pixels.pop_back();
+			ptr->SetCleanupFlag(true);
 		}
-		if (collisionFound)
-		{
-			break;
-		}
+	}
+
+	// Make the collision effect if we hit
+	if (collisionX != -1 && collisionY != -1)
+	{
+		//Make the swipe
+		ExpandingDrawablePtr drop = std::make_shared<ExpandingDrawable>();
+
+		// Set the direction.
+		drop->SetStartingPoint(collisionX, collisionY);
+
+		// Set the color
+		drop->SetColor(GetRainbowColor(1 - m_currentColor));
+
+		// Add the layer
+		m_mainLayer->AddDrawable(drop, 100);
 	}
 }

@@ -52,7 +52,8 @@ void ExpandingDropsGem::OnTick(uint64_t tick, std::chrono::milliseconds elapsedT
         }
 
         // Reset time.
-        std::uniform_int_distribution<int> dist(m_minTime, m_maxTime);
+		float scaler = GetScaledRealtimeValue(1, 0.15, 2, 1);
+        std::uniform_int_distribution<int> dist(m_minTime * scaler, m_maxTime * scaler);
         m_timeUntilNextDrop = milliseconds(dist(m_randomDevice));
 
         // Make the swipe
@@ -62,8 +63,21 @@ void ExpandingDropsGem::OnTick(uint64_t tick, std::chrono::milliseconds elapsedT
         std::uniform_int_distribution<int> startingDist(0, m_mainLayer->GetWitdh() - 1);
         drop->SetStartingPoint(startingDist(m_randomDevice), startingDist(m_randomDevice));
 
-        // Set the color
-        drop->SetColor(GenerateRandomColor());
+		// If the color factor is less than 0.3, use random.
+		float colorFactor = GetScaledRealtimeValue(2, 0, 0.5, 0);
+		if (colorFactor < 0.1)
+		{
+			drop->SetColor(GenerateRandomColor());
+		}
+		else
+		{
+			m_currentColor += (colorFactor * 0.2);
+			while(m_currentColor > 1)
+			{
+				m_currentColor -= 1.0;
+			}
+			drop->SetColor(GetRainbowColor(m_currentColor));
+		}
 
         // Add the layer
         m_mainLayer->AddDrawable(drop, 100);
