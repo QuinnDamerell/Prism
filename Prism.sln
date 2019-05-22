@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libusb-1.0 (static)", "libusb\msvc\libusb_static_2015.vcxproj", "{349EE8F9-7D25-4909-AAF5-FF3FADE72187}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PrismRunner", "PrismRunner\PrismRunner.vcxproj", "{E66DF5BF-4AB2-40C0-94AD-8831408774BF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LightFX", "LightFX\LightFX\LightFX.vcxproj", "{8C2942D4-ED1D-4064-B590-EEA6E8463710}"
@@ -20,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rapcom Projects", "Rapcom P
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mongoose", "Rapcom\mongoose\Mongoose.vcxproj", "{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libusb-1.0 (static)", "libusb\msvc\libusb_static_2017.vcxproj", "{349EE8F9-7D25-4909-AAF5-FF3FADE72187}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -28,14 +28,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x64.ActiveCfg = Debug|x64
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x64.Build.0 = Debug|x64
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x86.ActiveCfg = Debug|Win32
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x86.Build.0 = Debug|Win32
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x64.ActiveCfg = Release|x64
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x64.Build.0 = Release|x64
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x86.ActiveCfg = Release|Win32
-		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x86.Build.0 = Release|Win32
 		{E66DF5BF-4AB2-40C0-94AD-8831408774BF}.Debug|x64.ActiveCfg = Debug|x64
 		{E66DF5BF-4AB2-40C0-94AD-8831408774BF}.Debug|x64.Build.0 = Debug|x64
 		{E66DF5BF-4AB2-40C0-94AD-8831408774BF}.Debug|x86.ActiveCfg = Debug|Win32
@@ -76,6 +68,14 @@ Global
 		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x64.Build.0 = Release|x64
 		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x86.ActiveCfg = Release|Win32
 		{6FD5C4E5-533E-4278-A7D4-CAC51E916EE3}.Release|x86.Build.0 = Release|Win32
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x64.ActiveCfg = Debug|x64
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x64.Build.0 = Debug|x64
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x86.ActiveCfg = Debug|Win32
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Debug|x86.Build.0 = Debug|Win32
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x64.ActiveCfg = Release|x64
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x64.Build.0 = Release|x64
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x86.ActiveCfg = Release|Win32
+		{349EE8F9-7D25-4909-AAF5-FF3FADE72187}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
