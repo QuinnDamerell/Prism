@@ -132,13 +132,13 @@ endif
 ifneq ("$(DEBUG)", "")
 	# Debug build
 	TARGET := debug-$(TARGET)
-	CPPFLAGS += -g -DDEBUG -DENABLE_LOGGING
+	CPPFLAGS += -g -ggdb -DDEBUG -DENABLE_LOGGING
 	PACK_CMD :=
 else
 	# Optimized build	
 	STRIP_CMD := strip $(TARGET)
-	CPPFLAGS += -Os -DNDEBUG
-	LDFLAGS += -Os
+	CPPFLAGS += -Og -DNDEBUG
+	LDFLAGS += -Og
 endif
 
 ###########################################################################
