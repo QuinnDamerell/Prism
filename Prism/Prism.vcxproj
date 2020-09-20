@@ -55,9 +55,6 @@
     <ClCompile Include="src\UsbDeviceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\libusb\msvc\libusb_static_2015.vcxproj">
-      <Project>{349ee8f9-7d25-4909-aaf5-ff3fade72187}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\LightFX\LightFX\LightFX.vcxproj">
       <Project>{8c2942d4-ed1d-4064-b590-eea6e8463710}</Project>
     </ProjectReference>
